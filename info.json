@@ -1,0 +1,262 @@
+{ 
+    "products" : [
+        {
+            "name" : "Oregon THGN122",
+            "id" : "temperature_humidity_thgn122",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGN123",
+            "id" : "temperature_humidity_thgn123",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGN132",
+            "id" : "temperature_humidity_thgn132",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGR122",
+            "id" : "temperature_humidity_thgr122",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGR228",
+            "id" : "temperature_humidity_thgr228",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGR238",
+            "id" : "temperature_humidity_thgr238",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGR268",
+            "id" : "temperature_humidity_thgr268",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGR810",
+            "id" : "temperature_humidity_thgr810",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGN800",
+            "id" : "temperature_humidity_thgn800",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon RTGR328",
+            "id" : "temperature_humidity_rtgr328",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGR328",
+            "id" : "temperature_humidity_thgr328",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGR918/928",
+            "id" : "temperature_humidity_thgr918",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGRN228",
+            "id" : "temperature_humidity_thgrn228",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon THGN500",
+            "id" : "temperature_humidity_thgn500",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Oregon TFA TS34C",
+            "id" : "temperature_humidity_tfa_ts34c",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Cresta",
+            "id" : "temperature_humidity_cresta",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "WT260",
+            "id" : "temperature_humidity_wt260",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "WT260H",
+            "id" : "temperature_humidity_wt260h",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "WT440H",
+            "id" : "temperature_humidity_wt440h",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "WT450",
+            "id" : "temperature_humidity_wt450",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "WT450H",
+            "id" : "temperature_humidity_wt450h",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Viking 02035",
+            "id" : "temperature_humidity_viking_02035",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Viking 02038",
+            "id" : "temperature_humidity_viking_02038",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        },
+        {
+            "name" : "Rubicson",
+            "id" : "temperature_humidity_rubicson",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature_humidity"
+        }
+    ],
+    "configuration": [
+        {
+            "default": false,
+            "description": "Automatically start the plugin at Domogik startup", 
+            "key": "auto_startup",
+            "name" : "Start the plugin with Domogik",
+            "required": true,
+            "type": "boolean"
+        },
+        {
+            "default": "/dev/rfxcom",
+            "description": "Rfxcom usb device : /dev/rfxcom",
+            "key": "device",
+            "name" : "Rfxcom usb device",
+            "required": true,
+            "type": "string"
+        }
+    ], 
+    "commands": [],
+    "xpl_commands": [], 
+    "sensors": {
+        "temperature": {
+            "name": "Temperature",
+            "data_type": "DT_Temp",
+            "conversion": "",
+            "history": {
+                "store": true,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        },
+        "humidity": {
+            "name": "Humidity",
+            "data_type": "DT_Humidity",
+            "conversion": "",
+            "history": {
+                "store": true,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        }
+    },
+    "xpl_stats": {
+       "temperature": {
+            "name": "Temperature",
+            "schema": "sensor.basic",
+            "parameters": {
+                    "static": [
+            {
+                "key": "type",
+                "value": "temp"
+            }
+            ],
+                    "device": [],
+                    "dynamic": [
+                        {
+                             "key": "current",
+                             "ignore_values": "",
+                             "sensor": "temperature"
+                        }
+                    ]
+               }
+       },
+       "humidity": {
+            "name": "Humidity",
+            "schema": "sensor.basic",
+            "parameters": {
+                    "static": [
+            {
+                "key": "type",
+                "value": "humidity"
+            }
+            ],
+                    "device": [],
+                    "dynamic": [
+                        {
+                             "key": "current",
+                             "ignore_values": "",
+                             "sensor": "humidity"
+                        }
+                    ]
+               }
+       }
+    },
+    "device_types": {
+        "rfxcom.temperature_humidity": {
+            "description": "Oregon : ", 
+            "id": "rfxcom.temperature_hummidity", 
+            "name": "Temperature and humidity sensors",
+            "commands": [],
+            "sensors": ["temperature", "humidity"],
+            "parameters": [
+                {
+                    "key": "address",
+                    "description": "Device address. Example: th9 0xFFFF",
+                    "type": "string"
+                }
+            ]
+        }
+    }, 
+    "identity": {
+        "author": "Fritz", 
+        "author_email": "fritz.smh at gmail.com", 
+        "tags": ["rfxcom", "oregon", "lacrosse"], 
+        "dependencies": [], 
+        "description": "Rfxcom plugin for usb Rfxcom model", 
+        "domogik_min_version": "0.4.0", 
+        "name": "rfxcom", 
+        "type": "plugin", 
+        "version": "1.68.0a0"
+    }, 
+    "json_version": 2
+}
