@@ -155,14 +155,16 @@ class Rfxcom:
             self.rfxcom = serial.Serial(self.rfxcom_device, baudrate = 38400, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE)
             self.log.info("RFXCOM opened")
             self.log.info("**** Set up the RFXCOM ****")
-            self.log.info("Send 'reset' message")
-            self.rfxcom.write(binascii.unhexlify("0D00000000000000000000000000"))
+            reset_message = "0D00000000000000000000000000"
+            self.log.info("Send 'reset' message : {0}".format(reset_message))
+            self.rfxcom.write(binascii.unhexlify(reset_message))
             self.log.info("Wait 2 seconds...")
             time.sleep(2)
             self.log.info("Flush the serial port")
             self.rfxcom.flush()
-            self.log.info("Send 'get status' message")
-            self.rfxcom.write(binascii.unhexlify("0D00000102000000000000000000"))
+            get_status_message = "0D00000102000000000000000000"
+            self.log.info("Send 'get status' message : {0}".format(get_status_message))
+            self.rfxcom.write(binascii.unhexlify(get_status_message))
 
             # Wait for the status response
             self.log.info("Wait for the status message...")
