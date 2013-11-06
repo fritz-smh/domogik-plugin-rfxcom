@@ -37,12 +37,9 @@ Implements
 
 from domogik.xpl.common.xplmessage import XplMessage
 from domogik.xpl.common.plugin import XplPlugin
-#from domogik.xpl.common.queryconfig import Query
-#from domogik.mq.reqrep.client import MQSyncReq
-#from domogik.mq.message import MQMessage
 
-from packages.plugin_rfxcom.lib.rfxcom import Rfxcom
-from packages.plugin_rfxcom.lib.rfxcom import RfxcomException
+from domogik_packages.plugin_rfxcom.lib.rfxcom import Rfxcom
+from domogik_packages.plugin_rfxcom.lib.rfxcom import RfxcomException
 import threading
 import traceback
 
@@ -65,11 +62,10 @@ class RfxcomManager(XplPlugin):
         # but.... if we stop the plugin right now, we won't be able to detect existing device and send events about them
         # so we don't stop the plugin if no devices are created
         self.devices = self.get_device_list(quit_if_no_device = False)
-       
 
         # get the rfxcom device address in the filesystem
         self.rfxcom_device = self.get_config("device")
-        self.rfxcom_manager = Rfxcom(self.log, self.send_xpl, self.get_stop(), self.rfxcom_device, self.device_detected, self.send_xpl)
+        self.rfxcom_manager = Rfxcom(self.log, self.send_xpl, self.get_stop(), self.rfxcom_device, self.device_detected, self.send_xpl, self.register_thread, self.options.test_option)
 
         # create listeners for commands send over xPL
         # TODO

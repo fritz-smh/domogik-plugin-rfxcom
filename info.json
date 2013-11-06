@@ -187,6 +187,28 @@
                 "expire": 0,
                 "round_value": 0
             }
+        },
+        "battery": {
+            "name": "Battery",
+            "data_type": "DT_Scaling",
+            "conversion": "",
+            "history": {
+                "store": true,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        },
+        "rssi": {
+            "name": "Signal strength",
+            "data_type": "DT_Number",
+            "conversion": "",
+            "history": {
+                "store": true,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
         }
     },
     "xpl_stats": {
@@ -229,6 +251,46 @@
                         }
                     ]
                }
+       },
+       "battery": {
+            "name": "Battery",
+            "schema": "sensor.basic",
+            "parameters": {
+                    "static": [
+            {
+                "key": "type",
+                "value": "battery"
+            }
+            ],
+                    "device": [],
+                    "dynamic": [
+                        {
+                             "key": "current",
+                             "ignore_values": "",
+                             "sensor": "battery"
+                        }
+                    ]
+               }
+       },
+       "rssi": {
+            "name": "Signal strengh",
+            "schema": "sensor.basic",
+            "parameters": {
+                    "static": [
+            {
+                "key": "type",
+                "value": "rssi"
+            }
+            ],
+                    "device": [],
+                    "dynamic": [
+                        {
+                             "key": "current",
+                             "ignore_values": "",
+                             "sensor": "rssi"
+                        }
+                    ]
+               }
        }
     },
     "device_types": {
@@ -237,7 +299,7 @@
             "id": "rfxcom.temperature_hummidity", 
             "name": "Temperature and humidity sensors",
             "commands": [],
-            "sensors": ["temperature", "humidity"],
+            "sensors": ["temperature", "humidity", "battery", "rssi"],
             "parameters": [
                 {
                     "key": "address",

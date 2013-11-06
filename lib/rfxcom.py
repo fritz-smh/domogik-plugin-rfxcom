@@ -36,11 +36,12 @@ Implements
 """
 
 import binascii
-import serial
 import traceback
 import threading
 import time
 from Queue import Queue, Empty, Full
+import serial as serial
+import domogik.tests.common.testserial as testserial
 
 WAIT_BETWEEN_TRIES = 1
 
@@ -95,7 +96,7 @@ class Rfxcom:
     """ Rfxcom
     """
 
-    def __init__(self, log, callback, stop, rfxcom_device, cb_device_detected, cb_send_xpl):
+    def __init__(self, log, callback, stop, rfxcom_device, cb_device_detected, cb_send_xpl, cb_register_thread, fake_device = None):
         """ Init Disk object
             @param log : log instance
             @param callback : callback
@@ -103,13 +104,19 @@ class Rfxcom:
             @param rfxcom_device : rfxcom device (ex : /dev/rfxcom)
             @param cb_device_detected : callback to handle detected devices
             @param cb_send_xpl : callback to send a full xpl message
+            @param fake_device : fake device. If None, this will not be used. Else, the fake serial device library will be used
         """
         self.log = log
         self.callback = callback
         self.stop = stop
+
+        # fake or real device
+        self.fake_device = fake_device
         self.rfxcom_device = rfxcom_device
+
         self.cb_send_xpl = cb_send_xpl
         self.cb_device_detected = cb_device_detected
+        self.cb_register_thread = cb_register_thread
 
         # serial device
         self.rfxcom = None
@@ -127,6 +134,7 @@ class Rfxcom:
                                          "write_packets_process",
                                          (),
                                          {})
+        self.cb_register_thread(write_process)
         write_process.start()
 
 
@@ -152,7 +160,10 @@ class Rfxcom:
         try:
             self.log.info("**** Open RFXCOM ****")
             self.log.info("Try to open RFXCOM : %s" % self.rfxcom_device)
-            self.rfxcom = serial.Serial(self.rfxcom_device, baudrate = 38400, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE)
+            if self.fake_device != None:
+                self.rfxcom = testserial.Serial(self.fake_device, baudrate = 38400, parity = testserial.PARITY_NONE, stopbits = testserial.STOPBITS_ONE)
+            else:
+                self.rfxcom = serial.Serial(self.rfxcom_device, baudrate = 38400, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE)
             self.log.info("RFXCOM opened")
             self.log.info("**** Set up the RFXCOM ****")
             reset_message = "0D00000000000000000000000000"
@@ -258,7 +269,11 @@ class Rfxcom:
         while not self.stop.isSet():
 
             # Wait for a packet in the queue
-            data = self.write_rfx.get(block = True)
+            # TODO : avoid to use a blocking call
+            try:
+                data = self.write_rfx.get(block = True, timeout = 5)
+            except Empty:
+                continue
             seqnbr = data["seqnbr"]
             packet = data["packet"]
             xpl_trig_message = data["xpl_trig_message"]
@@ -362,7 +377,6 @@ class Rfxcom:
         data_len = self.rfxcom.read()
         self.log.debug("**** New packet received ****")
         hex_data_len = binascii.hexlify(data_len)
-        print hex_data_len
         int_data_len = int(hex_data_len, 16)
         self.log.debug("Packet length = %s" % int_data_len)
         # the max length of a valid message is for :
@@ -463,11 +477,15 @@ class Rfxcom:
         id = gh(data, 3,2)
         address = "th%s 0x%s" %(subtype[1], id)
         temp_high = gh(data, 5)
+        temp_high_bin = gb(data, 5)
         temp_low = gh(data, 6)
         
+        sign = get_bit(temp_high_bin, 7)
         # first bit = 1 => sign = "-"
-        if (int(temp_high, 16) & 0b1000000) == 0b10000000:
-            temp = - float((int(temp_low, 16) + 256*(int(bin(temp_high, 16)) & 0b01111111)))/10
+        if sign == "1":
+            # we remove the left bit of temp_high
+            temp_high_dec = int(get_bit(temp_high_bin, 6, 7), 2)
+            temp = - float((int(temp_low, 16) + 256*temp_high_dec))/10
         # first bit = 0 => sign = "+"
         else:
             temp = float((int(temp_high, 16) * 256 + int(temp_low, 16)))/10
@@ -475,7 +493,7 @@ class Rfxcom:
         humidity = int(gh(data, 7), 16) 
         humidity_status_code = ghexa(data, 8)
         humidity_status = TYPE_52_HUMIDITY_STATUS[humidity_status_code]
-        battery = int(gh(data, 9)[0], 16) * 10  # percent
+        battery = (1+int(gh(data, 9)[0], 16)) * 10  # percent
         rssi = int(gh(data, 9)[1], 16) * 100/16 # percent
  
         # debug informations
