@@ -27,6 +27,8 @@ script:
   - cd $TRAVIS_BUILD_DIR
   - python tests/200_global_tests.py  
   - python tests/352_type52_temperarature_and_humidity_sensors.py
+after_script:
+  - ~/domogik/src/domogik/tests/travis/travis-after-failure.sh
 after_failure:
   - ~/domogik/src/domogik/tests/travis/travis-after-failure.sh
 notifications:
