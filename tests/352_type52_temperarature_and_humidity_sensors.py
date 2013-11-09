@@ -61,8 +61,8 @@ class RfxcomTestCase(PluginTestCase):
 
             Notice that for this test, the same message will be received from the fake rfxcom device 5 times! 
         """
-        global address
-        global device_id
+        #global address
+        #global device_id
 
         # set interval betwwen each message
         interval = 10  # seconds
@@ -72,6 +72,19 @@ class RfxcomTestCase(PluginTestCase):
         humidity_desc = 'wet'
         battery = 60
         rssi = 0
+
+        self.test_feature(interval, temperature, humidity, humidity_desc, battery, rssi)
+
+    def test_feature(self, interval, temperature, humidity, humidity_desc, battery, rssi):
+        """ Do the tests 
+            @param temperature
+            @param humidity
+            @param humidity_desc
+            @param battery
+            @param rssi
+        """
+        global address
+        global device_id
 
         # test temperature
         print(u"Check that a message about temperature is sent.")
