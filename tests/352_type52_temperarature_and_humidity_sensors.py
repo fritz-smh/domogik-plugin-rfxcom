@@ -210,8 +210,9 @@ if __name__ == "__main__":
     # do some tests comon to all the plugins
     #suite.addTest(RfxcomTestCase("test_9900_hbeat", xpl_plugin, name, cfg))
     suite.addTest(RfxcomTestCase("test_9990_stop_the_plugin", xpl_plugin, name, cfg))
-    unittest.TextTestRunner().run(suite)
     
     # quit
+    res = unittest.TextTestRunner().run(suite)
     xpl_plugin.force_leave()
-    
+    sys.exit(res.wasSuccessful())
+
