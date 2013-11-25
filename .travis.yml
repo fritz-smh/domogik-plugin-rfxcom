@@ -28,8 +28,8 @@ script:
   - python tests/352_type52_temperarature_and_humidity_sensors.py
 after_script:
   - ~/domogik/src/domogik/tests/travis/travis-after-failure.sh
-after_failure:
-  - ~/domogik/src/domogik/tests/travis/travis-after-failure.sh
+after_script:
+  - ~/domogik/src/domogik/tests/travis/travis-after.sh
 notifications:
   irc: "irc.freenode.net#domogik"
   on_success: never

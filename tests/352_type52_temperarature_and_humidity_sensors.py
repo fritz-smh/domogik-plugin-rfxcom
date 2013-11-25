@@ -63,19 +63,32 @@ class RfxcomTestCase(PluginTestCase):
         """
         #global address
         #global device_id
+        global devices
 
         # set interval betwwen each message
         interval = 10  # seconds
+
         # set constants for values in xpl messages
-        temperature = 21.2
-        humidity = 71
-        humidity_desc = 'wet'
-        battery = 60
-        rssi = 0
+        tests = [ {
+                     'address' : "th1 0x2504",
+                     'temperature' : 21.2,
+                     'humidity' : 71,
+                     'humidity_desc' : 'wet',
+                     'battery' : 60,
+                     'rssi' : 0
+                  }]
 
-        self.test_feature(interval, temperature, humidity, humidity_desc, battery, rssi)
+        for test in tests:
+            self.test_feature(test['address'], 
+                              devices[test['address']], 
+                              interval, 
+                              test['temperature'], 
+                              test['humidity'], 
+                              test['humidity_desc'], 
+                              test['battery'], 
+                              test['rssi'])
 
-    def test_feature(self, interval, temperature, humidity, humidity_desc, battery, rssi):
+    def test_feature(self, address, device_id, interval, temperature, humidity, humidity_desc, battery, rssi):
         """ Do the tests 
             @param temperature
             @param humidity
@@ -83,8 +96,6 @@ class RfxcomTestCase(PluginTestCase):
             @param battery
             @param rssi
         """
-        global address
-        global device_id
 
         # test temperature
         print(u"Check that a message about temperature is sent.")
@@ -150,7 +161,11 @@ if __name__ == "__main__":
     test_folder = os.path.dirname(os.path.realpath(__file__))
 
     ### global variables
-    address = "th1 0x2504"
+    #address = "th1 0x2504"
+    # the key will be the device address
+    devices = { "th1 0x2504" : 0,
+                "th1 0xd601" : 0
+              }
 
     ### configuration
 
@@ -187,13 +202,15 @@ if __name__ == "__main__":
         print(u"Error while deleting all the test device for the client id '{0}' : {1}".format(client_id, traceback.format_exc()))
         sys.exit(1)
 
-    # create a test device
-    try:
-        device_id = td.create_device(client_id, "test_device_rfxcom_type52", "rfxcom.temperature_humidity")
-        td.configure_global_parameters({"address" : address})
-    except: 
-        print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
-        sys.exit(1)
+    # create the test devices
+    for dev in devices:
+        try:
+            device_id = td.create_device(client_id, "test_device_rfxcom_type52_{0}".format(dev), "rfxcom.temperature_humidity")
+            td.configure_global_parameters({"address" : dev})
+            devices[dev] = device_id
+        except: 
+            print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
+            sys.exit(1)
     
     ### prepare and run the test suite
     suite = unittest.TestSuite()
@@ -213,6 +230,8 @@ if __name__ == "__main__":
     
     # quit
     res = unittest.TextTestRunner().run(suite)
+    print "force_leave"
     xpl_plugin.force_leave()
+    print "boom"
     sys.exit(res.wasSuccessful())
 
