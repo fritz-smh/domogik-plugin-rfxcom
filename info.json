@@ -168,6 +168,7 @@
     "sensors": {
         "temperature": {
             "name": "Temperature",
+            "type": "absolute",
             "data_type": "DT_Temp",
             "conversion": "",
             "history": {
@@ -179,6 +180,7 @@
         },
         "humidity": {
             "name": "Humidity",
+            "type": "absolute",
             "data_type": "DT_Humidity",
             "conversion": "",
             "history": {
@@ -190,6 +192,7 @@
         },
         "battery": {
             "name": "Battery",
+            "type": "absolute",
             "data_type": "DT_Scaling",
             "conversion": "",
             "history": {
@@ -201,6 +204,7 @@
         },
         "rssi": {
             "name": "Signal strength",
+            "type": "absolute",
             "data_type": "DT_Number",
             "conversion": "",
             "history": {
@@ -303,6 +307,7 @@
             "parameters": [
                 {
                     "key": "address",
+                    "xpl" : true,
                     "description": "Device address. Example: th9 0xFFFF",
                     "type": "string"
                 }
