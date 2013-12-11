@@ -64,7 +64,7 @@ class RfxcomManager(XplPlugin):
         self.devices = self.get_device_list(quit_if_no_device = False)
 
         # get the rfxcom device address in the filesystem
-        self.rfxcom_device = self.get_config("device")
+        self.rfxcom_device = self.get_config("rfxcom_device")
         self.rfxcom_manager = Rfxcom(self.log, self.send_xpl, self.get_stop(), self.rfxcom_device, self.device_detected, self.send_xpl, self.register_thread, self.options.test_option)
 
         # create listeners for commands send over xPL

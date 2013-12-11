@@ -157,7 +157,7 @@
         {
             "default": "/dev/rfxcom",
             "description": "Rfxcom usb device : /dev/rfxcom",
-            "key": "device",
+            "key": "rfxcom_device",
             "name" : "Rfxcom usb device",
             "required": true,
             "type": "string"
@@ -306,7 +306,7 @@
             "sensors": ["temperature", "humidity", "battery", "rssi"],
             "parameters": [
                 {
-                    "key": "address",
+                    "key": "device",
                     "xpl" : true,
                     "description": "Device address. Example: th9 0xFFFF",
                     "type": "string"

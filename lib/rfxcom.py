@@ -161,9 +161,9 @@ class Rfxcom:
             self.log.info("**** Open RFXCOM ****")
             self.log.info("Try to open RFXCOM : %s" % self.rfxcom_device)
             if self.fake_device != None:
-                self.rfxcom = testserial.Serial(self.fake_device, baudrate = 38400, parity = testserial.PARITY_NONE, stopbits = testserial.STOPBITS_ONE)
+                self.rfxcom = testserial.Serial(self.fake_device, baudrate = 38400, parity = testserial.PARITY_NONE, stopbits = testserial.STOPBITS_ONE, timeout = 5)
             else:
-                self.rfxcom = serial.Serial(self.rfxcom_device, baudrate = 38400, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE)
+                self.rfxcom = serial.Serial(self.rfxcom_device, baudrate = 38400, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE, timeout = 5)
             self.log.info("RFXCOM opened")
             self.log.info("**** Set up the RFXCOM ****")
             reset_message = "0D00000000000000000000000000"
@@ -372,9 +372,14 @@ class Rfxcom:
             Then, read message
         """
         # We wait for a message (and its size)
-        self.log.debug("**** Waiting for a packet from the RFXCOM ****")
-
+        #self.log.debug("**** Waiting for a packet from the RFXCOM ****")
         data_len = self.rfxcom.read()
+
+        # if timeout is reached for reading, don't process the rest of the function
+        # there is a timeout set in order to allow the plugin to shutdown correctly
+        if data_len == "":
+            return
+
         self.log.debug("**** New packet received ****")
         hex_data_len = binascii.hexlify(data_len)
         int_data_len = int(hex_data_len, 16)
