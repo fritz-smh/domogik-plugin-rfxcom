@@ -168,11 +168,12 @@
     "sensors": {
         "temperature": {
             "name": "Temperature",
-            "type": "absolute",
+            "incremental" : false,
             "data_type": "DT_Temp",
             "conversion": "",
             "history": {
                 "store": true,
+                "duplicate" : false,
                 "max": 0,
                 "expire": 0,
                 "round_value": 0
@@ -180,11 +181,12 @@
         },
         "humidity": {
             "name": "Humidity",
-            "type": "absolute",
+            "incremental" : false,
             "data_type": "DT_Humidity",
             "conversion": "",
             "history": {
                 "store": true,
+                "duplicate" : false,
                 "max": 0,
                 "expire": 0,
                 "round_value": 0
@@ -192,11 +194,12 @@
         },
         "battery": {
             "name": "Battery",
-            "type": "absolute",
+            "incremental" : false,
             "data_type": "DT_Scaling",
             "conversion": "",
             "history": {
                 "store": true,
+                "duplicate" : false,
                 "max": 0,
                 "expire": 0,
                 "round_value": 0
@@ -204,11 +207,12 @@
         },
         "rssi": {
             "name": "Signal strength",
-            "type": "absolute",
+            "incremental" : false,
             "data_type": "DT_Number",
             "conversion": "",
             "history": {
                 "store": true,
+                "duplicate" : false,
                 "max": 0,
                 "expire": 0,
                 "round_value": 0
