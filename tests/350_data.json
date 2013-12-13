@@ -1,0 +1,51 @@
+{
+    "history" : [
+                    { "description" : "bad data (as this happens on startup)",
+                      "action" : "data", 
+                      "data" : "61"
+                    },
+                    { "description" : "bad data (as this happens on startup)",
+                      "action" : "data", 
+                      "data" : "0d"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    },
+                    { "description" : "status of the rfxcom",
+                      "action" : "data", 
+                      "data" : "010001025344000c2f00000000"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 15
+                    }
+                ],
+    "responses" : {},
+    "loop" : [
+                    { "description" : "length of the next message",
+                      "action" : "data", 
+                      "data" : "08"
+                    },
+                    { "description" : "device 0001 : temperature sensor : negative temperature",
+                      "action" : "data", 
+                      "data" : "500110000180BC69"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    },
+                    { "description" : "length of the next message",
+                      "action" : "data", 
+                      "data" : "08"
+                    },
+                    { "description" : "device FB01 : temperature sensor : positive temperature",
+                      "action" : "data", 
+                      "data" : "50021DFB0100D770"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    }
+              ]
+}

@@ -302,8 +302,23 @@
        }
     },
     "device_types": {
+        "rfxcom.temperature": {
+            "description": "", 
+            "id": "rfxcom.temperature", 
+            "name": "Temperature sensors",
+            "commands": [],
+            "sensors": ["temperature", "battery", "rssi"],
+            "parameters": [
+                {
+                    "key": "device",
+                    "xpl" : true,
+                    "description": "Device address. Example: th9 0xFFFF",
+                    "type": "string"
+                }
+            ]
+        },
         "rfxcom.temperature_humidity": {
-            "description": "Oregon : ", 
+            "description": "", 
             "id": "rfxcom.temperature_hummidity", 
             "name": "Temperature and humidity sensors",
             "commands": [],
@@ -321,13 +336,13 @@
     "identity": {
         "author": "Fritz", 
         "author_email": "fritz.smh at gmail.com", 
-        "tags": ["rfxcom", "oregon", "lacrosse"], 
+        "tags": ["rfxcom", "temperature", "humidity", "oregon", "lacrosse"], 
         "dependencies": [], 
         "description": "Rfxcom plugin for usb Rfxcom model", 
         "domogik_min_version": "0.4.0", 
         "name": "rfxcom", 
         "type": "plugin", 
-        "version": "1.68.0a0"
+        "version": "1.68.1a0"
     }, 
     "json_version": 2
 }

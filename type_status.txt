@@ -1,0 +1,41 @@
+Purpose of this file
+====================
+
+This file helps the developper to remind what can be missing for some types
+
+
+What does the developper need to add a new feature ?
+====================================================
+
+Complete the json file : 
+* device type
+* sensor
+* command
+* plugin version
+* products
+
+Pictures
+* products pictures
+
+Doc :
+* changelog
+* doc for the feature
+
+Python :
+* In the lib header, add some global variables if needed (MODELS, ...)
+
+Tests :
+* Create a mock for the device
+* Create the test using the mock
+
+
+Features
+========
+
+=================================================== ==== ====== ================ ================= ===== =====
+Type / feature                                      Json Python List of products Products pictures Doc   Tests
+=================================================== ==== ====== ================ ================= ===== =====
+type 52 : temperature and humidity                  OK   OK     OK (firm 68)     All               OK    33%
+--------------------------------------------------- ---- ------ ---------------- ----------------- ----- -----
+type 50 : temperature                               OK   OK     
+=================================================== ==== ====== ================ ================= ===== =====

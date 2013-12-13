@@ -59,6 +59,19 @@ RECEIVER_TRANSCEIVER = {
   "0x5B" : "868.95MHz",
 }
 
+TYPE_50_MODELS = {
+  "0x01" : "THR128/138, THC138",
+  "0x02" : "THC238/268,THN132,THWR288,THRN122,THN122,AW129/131",
+  "0x03" : "THWR800",
+  "0x04" : "RTHN318",
+  "0x05" : "La Crosse TX2, TX3, TX4, TX17",
+  "0x06" : "TS15C",
+  "0x07" : "Viking 02811",
+  "0x08" : "La Crosse WS2300",
+  "0x09" : "RUBiCSON",
+  "0x0A" : "TFA 30.3133"
+}
+
 TYPE_52_HUMIDITY_STATUS = {
   "0x00" : "dry",
   "0x01" : "comfort",
@@ -473,6 +486,65 @@ class Rfxcom:
         self.log.info("- Protocol > X10                         : {0}".format(get_bit(msg5, 0)))
 
 
+
+
+    def _process_50(self, data):
+        """ Temperature sensors
+            Last update : 1.68
+        """
+        subtype = gh(data, 1)
+        seqnbr = gh(data, 2)
+        id = gh(data, 3,2)
+        address = "temp%s 0x%s" %(subtype[1], id)
+
+        temp_high = gh(data, 5)
+        temp_high_bin = gb(data, 5)
+        temp_low = gh(data, 6)
+
+        sign = get_bit(temp_high_bin, 7)
+        # first bit = 1 => sign = "-"
+        if sign == "1":
+            # we remove the left bit of temp_high
+            temp_high_dec = int(get_bit(temp_high_bin, 6, 7), 2)
+            temp = - float((int(temp_low, 16) + 256*temp_high_dec))/10
+        # first bit = 0 => sign = "+"
+        else:
+            temp = float((int(temp_high, 16) * 256 + int(temp_low, 16)))/10
+
+        rssi = int(gh(data, 7)[0], 16) * 100/16 # percent
+        battery = (1+int(gh(data, 7)[1], 16)) * 10  # percent
+
+        # debug informations
+        self.log.debug("Packet informations :")
+        self.log.debug("- type 50 : temperature sensor")
+        self.log.debug("- address = {0}".format(address))
+        self.log.debug("- model = {0}".format(TYPE_50_MODELS["0x{0}".format(subtype)]))
+        self.log.debug("- temperature = {0}".format(temp))
+        self.log.debug("- battery = {0}".format(battery))
+        self.log.debug("- rssi = {0}".format(rssi))
+ 
+        # send xPL
+        self.cb_send_xpl(schema = "sensor.basic",
+                         data = {"device" : address,
+                                 "type" : "temp",
+                                 "current" : temp,
+                                 "units" : "c"})
+        self.cb_send_xpl(schema = "sensor.basic",
+                         data = {"device" : address,
+                                 "type" : "battery",
+                                 "current" : battery})
+        self.cb_send_xpl(schema = "sensor.basic",
+                         data = {"device" : address,
+                                 "type" : "rssi",
+                                 "current" : rssi})
+
+        # handle device features detection
+        for feature in ['temperature']:
+            self.cb_device_detected(device_type = "rfxcom.temperature", 
+                                    type = "xpl_stats",
+                                    feature = feature,
+                                    data = {"address" : address})
+
     def _process_52(self, data):
         """ Temperature and humidity sensors
             Last update : 1.68
@@ -498,8 +570,8 @@ class Rfxcom:
         humidity = int(gh(data, 7), 16) 
         humidity_status_code = ghexa(data, 8)
         humidity_status = TYPE_52_HUMIDITY_STATUS[humidity_status_code]
-        battery = (1+int(gh(data, 9)[0], 16)) * 10  # percent
-        rssi = int(gh(data, 9)[1], 16) * 100/16 # percent
+        rssi = int(gh(data, 9)[0], 16) * 100/16 # percent
+        battery = (1+int(gh(data, 9)[1], 16)) * 10  # percent
  
         # debug informations
         self.log.debug("Packet informations :")
@@ -542,6 +614,8 @@ class Rfxcom:
                                     type = "xpl_stats",
                                     feature = feature,
                                     data = {"address" : address})
+
+
 
 
     

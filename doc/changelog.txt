@@ -2,10 +2,15 @@
 Changelog
 =========
 
-1.68.0
-===
+1.68.1
+======
 
-* Plugin reboot
+* New feature : temperature sensors (type 50)
+
+1.68.0
+======
+
+* Plugin reboot for Domogik 0.4
 * The second number of the plugin release will now be the compliant firmware
 * Only one feature in the plugin currently : temperature and hygro sensors (type 52)
 
