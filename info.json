@@ -1,6 +1,141 @@
 { 
     "products" : [
         {
+            "name" : "Oregon THR128",
+            "id" : "temperature_thr128",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THR138",
+            "id" : "temperature_thr138",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THC138",
+            "id" : "temperature_thc138",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THC238",
+            "id" : "temperature_thc238",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THC268",
+            "id" : "temperature_thc268",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THN132",
+            "id" : "temperature_thn132",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THWR288",
+            "id" : "temperature_thwr288",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THRN122",
+            "id" : "temperature_thrn122",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THN122",
+            "id" : "temperature_thn122",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon AW129",
+            "id" : "temperature_aw129",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon AW131",
+            "id" : "temperature_aw131",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon THWR800",
+            "id" : "temperature_thwr800",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Oregon RTHN318",
+            "id" : "temperature_rthn318",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "La Crosse TX2",
+            "id" : "temperature_lacrosse_tx2",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "La Crosse TX3",
+            "id" : "temperature_lacrosse_tx3",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "La Crosse TX4",
+            "id" : "temperature_lacrosse_tx4",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "La Crosse TX17",
+            "id" : "temperature_lacrosse_tx17",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "TS15C",
+            "id" : "temperature_ts15c",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "Viking 02811",
+            "id" : "temperature_viking_02811",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "La Crosse WS2300",
+            "id" : "temperature_lacrosse_ws2300",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "RUBiCSON",
+            "id" : "temperature_rubicson",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+        {
+            "name" : "TFA 30.3133",
+            "id" : "temperature_tfa_30_3133",
+            "documentation" : "#",
+            "type" : "rfxcom.temperature"
+        },
+
+
+
+        {
             "name" : "Oregon THGN122",
             "id" : "temperature_humidity_thgn122",
             "documentation" : "#",
