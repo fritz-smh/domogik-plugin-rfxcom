@@ -318,34 +318,40 @@ class Rfxcom:
         return "%02x" % ret
             
 
-    def wait_for(self, stop, length, type, timeout = None):
+    def wait_for(self, stop, length, msg_type, timeout = None):
         """ Wait for some dedicated message from the Rfxcom. All other received messages will be ignored
         @param stop : an Event to wait for stop request
         @param length : length of the waited message
-        @param type : type of the waited message
+        @param msg_type : type of the waited message
         @param timeout : timeout : if reached, we raise an error
         """
-        self.log.info("Start listening to the rfxcom device for lenght={0}, type={1}".format(length, type))
+        self.log.info("Start listening to the rfxcom device for lenght={0}, type={1}".format(length, msg_type))
         try:
             # TODO : handle timeout
             while not stop.isSet():
 
-                self.log.debug("Waiting for a packet from the rfxcom with a length of {0} and hoping type will be {1}...".format(length, type))
+                self.log.debug("Waiting for a packet from the rfxcom with a length of {0} and hoping type will be {1}...".format(length, msg_type))
                 data_len = self.rfxcom.read()
+                # handle empty data (why the hell does this happen ?)
+                if data_len == '':
+                    #self.log.debug("Timeout reached (this is not an issue!!)")
+                    continue
+
                 hex_data_len = binascii.hexlify(data_len)
                 int_data_len = int(hex_data_len, 16)
+                    
                 self.log.debug("Packet of length {0} (0x{1}) received, start processing...".format(int_data_len, hex_data_len))
                 if int_data_len == length:
                     # We read data
                     data = self.rfxcom.read(int_data_len)
                     hex_data = binascii.hexlify(data)
                     self.log.debug("Packet : %s" % hex_data)
-                    msg_type = hex_data[0] + hex_data[1]
-                    if msg_type == type:
+                    the_type = hex_data[0] + hex_data[1]
+                    if msg_type == the_type:
                         self.log.debug("Packet type is the one we wait for. End waiting for a dedicated packet")
                         return hex_data
                     else:
-                        self.log.debug("Packet type (0x{0})is the one we are waiting for (0x{1}) : skipping this one.".format(msg_type, type))
+                        self.log.debug("Packet type (0x{0})is the one we are waiting for (0x{1}) : skipping this one.".format(the_type, msg_type))
                     
                 else:
                     # bad length : skip message
