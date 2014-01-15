@@ -1,0 +1,1 @@
+SUBSYSTEM=="tty" ATTRS{product}=="RFXCOM USB 433.92MHz transceiver" SYMLINK+="rfxcom" MODE="0666"
