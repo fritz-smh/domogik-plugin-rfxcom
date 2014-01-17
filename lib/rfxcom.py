@@ -520,11 +520,13 @@ class Rfxcom:
         rssi = int(gh(data, 7)[0], 16) * 100/16 # percent
         battery = (1+int(gh(data, 7)[1], 16)) * 10  # percent
 
+        model = "{0}".format(TYPE_50_MODELS["0x{0}".format(subtype)])
+
         # debug informations
         self.log.debug("Packet informations :")
         self.log.debug("- type 50 : temperature sensor")
         self.log.debug("- address = {0}".format(address))
-        self.log.debug("- model = {0}".format(TYPE_50_MODELS["0x{0}".format(subtype)]))
+        self.log.debug("- model = {0}".format(model))
         self.log.debug("- temperature = {0}".format(temp))
         self.log.debug("- battery = {0}".format(battery))
         self.log.debug("- rssi = {0}".format(rssi))
@@ -549,7 +551,8 @@ class Rfxcom:
             self.cb_device_detected(device_type = "rfxcom.temperature", 
                                     type = "xpl_stats",
                                     feature = feature,
-                                    data = {"address" : address})
+                                    data = {"device" : address,
+                                            "reference" : model})
 
     def _process_52(self, data):
         """ Temperature and humidity sensors
@@ -579,6 +582,8 @@ class Rfxcom:
         rssi = int(gh(data, 9)[0], 16) * 100/16 # percent
         battery = (1+int(gh(data, 9)[1], 16)) * 10  # percent
  
+        model = "{0}".format(TYPE_52_MODELS["0x{0}".format(subtype)])
+
         # debug informations
         self.log.debug("Packet informations :")
         self.log.debug("- type 52 : temperature and humidity sensor")
@@ -619,7 +624,8 @@ class Rfxcom:
             self.cb_device_detected(device_type = "rfxcom.temperature_humidity", 
                                     type = "xpl_stats",
                                     feature = feature,
-                                    data = {"address" : address})
+                                    data = {"device" : address,
+                                            "reference" : model})
 
 
 
