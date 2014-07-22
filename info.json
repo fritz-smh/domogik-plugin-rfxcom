@@ -290,8 +290,8 @@
             "type": "string"
         }
     ], 
-    "commands": [],
-    "xpl_commands": [], 
+    "commands": {},
+    "xpl_commands": {}, 
     "sensors": {
         "temperature": {
             "name": "Temperature",
