@@ -25,6 +25,22 @@ Dependencies
 
 There is no dependency.
 
+Install the RFXCOM usb device
+=============================
+
+Create an udev rule
+-------------------
+
+You may create a udev rule for this device. You can find sample udev rules in the **udev/** folder of this plugin.
+
+You just need to copy the choosen sample file in the folder **/etc/udev/rules.d/** and unplug/plug the device.
+
+Install the RFXCOM xPL LAN device
+=================================
+
+Set up your RFXCOM lan with the xPL firmware (check the RFXCOM LAN module documentation).
+Plug your RFXCOM lan on the same network as your Domogik server.
+
 Plugin configuration
 ====================
 
