@@ -298,6 +298,7 @@
             "incremental" : false,
             "data_type": "DT_Temp",
             "conversion": "",
+            "timeout" : 300,
             "history": {
                 "store": true,
                 "duplicate" : false,
@@ -311,6 +312,7 @@
             "incremental" : false,
             "data_type": "DT_Humidity",
             "conversion": "",
+            "timeout" : 300,
             "history": {
                 "store": true,
                 "duplicate" : false,
@@ -324,6 +326,7 @@
             "incremental" : false,
             "data_type": "DT_Scaling",
             "conversion": "",
+            "timeout" : 300,
             "history": {
                 "store": true,
                 "duplicate" : false,
@@ -337,6 +340,7 @@
             "incremental" : false,
             "data_type": "DT_Number",
             "conversion": "",
+            "timeout" : 300,
             "history": {
                 "store": true,
                 "duplicate" : false,
@@ -469,7 +473,7 @@
         "domogik_min_version": "0.4.0", 
         "name": "rfxcom", 
         "type": "plugin", 
-        "version": "1.68.1a0"
+        "version": "1.68.1"
     }, 
     "json_version": 2
 }
