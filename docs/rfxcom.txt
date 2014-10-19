@@ -7,7 +7,7 @@ Plugin rfxcom
 Purpose
 =======
 
-The rfxcom plugin handled the Rfxcom hardware devices:
+The rfxcom plugin handle the following Rfxcom hardware devices:
 
 * RFXtrx433 USB 433.92MHz Transceiver
 
