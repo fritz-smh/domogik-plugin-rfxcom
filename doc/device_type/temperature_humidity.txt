@@ -1,9 +1,9 @@
-================================================
-Plugin rfxcom - temperature and humidity devices
-================================================
-
+================================
 Temperature and humidity devices
 ================================
+
+Overview
+========
 
 These devices are able to send the temperature and the humidity. There are many models of them. You can find the list of all the compliant models in the products list of the user interface.
 
@@ -23,7 +23,7 @@ These devices has several features:
 Configuration
 =============
 
-When you create such a device, you will have to set these parameters:
+When you create such a device, you will have to set this parameter:
 
 ===================== =========================== ======================================================================
 Key                   Type                        Description
