@@ -172,10 +172,11 @@ class Rfxcom:
         """
         try:
             self.log.info("**** Open RFXCOM ****")
-            self.log.info("Try to open RFXCOM : %s" % self.rfxcom_device)
             if self.fake_device != None:
+                self.log.info("Try to open fake RFXCOM : %s" % self.fake_device)
                 self.rfxcom = testserial.Serial(self.fake_device, baudrate = 38400, parity = testserial.PARITY_NONE, stopbits = testserial.STOPBITS_ONE, timeout = 5)
             else:
+                self.log.info("Try to open RFXCOM : %s" % self.rfxcom_device)
                 self.rfxcom = serial.Serial(self.rfxcom_device, baudrate = 38400, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE, timeout = 5)
             self.log.info("RFXCOM opened")
             self.log.info("**** Set up the RFXCOM ****")
