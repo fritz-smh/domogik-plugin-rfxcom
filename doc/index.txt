@@ -1,68 +1,13 @@
-.. _index:
+.. _toc:
 
-===============
-Plugin rfxcom
-===============
-
-Purpose
-=======
-
-The rfxcom plugin handled the Rfxcom hardware devices:
-
-* RFXtrx433 USB 433.92MHz Transceiver
-  .. image:: rfxcom_usb_model.jpg
-* RFXLAN Transceiver 433.92 MHz with xPL interface
-  .. image:: rfxcom_lan_model.jpg
-
-You will get more informations on these devices on the `official RFXCOM website <http://www.rfxcom.com>`_
-	
-
-Dependencies
-============
-
-There is no dependency.
-
-Plugin configuration
-====================
-
-Here is the global configuration:
-
-
-===================== =========================== ======================================================================
-Key                   Type                        Description
-===================== =========================== ======================================================================
-device                string                      For the usb model, the path to the RFXCOM serial device. Example : */dev/rfxcom*
-===================== =========================== ======================================================================
-
-
-Create the devices
-==================
-
-If your device is already listed in the products list, select it. Some fields will be automatically prefilled.
-
-* :doc:`Temperature and humidity devices <device_type/temperature_humidity>` (type 52)
-
-How to get a device address ?
-=============================
-
-.. todo::
-
-    to describe : auto discovery
-
-How to set a device to an address ?
-===================================
-
-.. todo::
-
-    to describe : global method by brands
-
-Start the plugin
+================
+Table Of Content
 ================
 
-You can now start the plugin (start button) and use the created devices.
+.. toctree::
 
-Set up your widgets on the user interface
-=========================================
-
-You can now place the widgets of your devices features on the user interface.
+    /rfxcom
+    /device_type/temperature_humidity
+    /dev
+    /changelog
 
