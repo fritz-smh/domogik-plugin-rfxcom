@@ -203,14 +203,39 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # create the test devices
-    for dev in devices:
-        try:
-            device_id = td.create_device(client_id, "test_device_rfxcom_type52_{0}".format(dev), "rfxcom.temperature_humidity")
-            td.configure_global_parameters({"device" : dev})
-            devices[dev] = device_id
-        except: 
-            print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
-            sys.exit(1)
+    #for dev in devices:
+    #    try:
+    #        device_id = td.create_device(client_id, "test_device_rfxcom_type52_{0}".format(dev), "rfxcom.temperature_humidity")
+    #        td.configure_global_parameters({"device" : dev})
+    #        devices[dev] = device_id
+    #    except: 
+    #        print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
+    #        sys.exit(1)
+
+    # create a test device
+    try:
+        params = td.get_params(client_id, "rfxcom.temperature_humidity")
+   
+        for dev in devices:
+            # fill in the params
+            params["device_type"] = "rfxcom.temperature_humidity"
+            params["name"] = "test_device_rfxcom_type52_{0}".format(dev)
+            params["reference"] = "reference"
+            params["description"] = "description"
+            # global params
+            pass # there are no global params for this plugin
+            # xpl params
+            for the_param in params['xpl']:
+                if the_param['key'] == "device":
+                    the_param['value'] = dev
+            print params['xpl']
+            # create
+            device_id = td.create_device(params)['id']
+
+    except:
+        print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
+        sys.exit(1)
+
     
     ### prepare and run the test suite
     suite = unittest.TestSuite()
@@ -230,8 +255,10 @@ if __name__ == "__main__":
     
     # quit
     res = unittest.TextTestRunner().run(suite)
-    print "force_leave"
-    xpl_plugin.force_leave()
-    print "boom"
-    sys.exit(res.wasSuccessful())
+    if res.wasSuccessful() == True:
+        rc = 0   # tests are ok so the shell return code is 0
+    else:
+        rc = 1   # tests are ok so the shell return code is != 0
+    xpl_plugin.force_leave(return_code = rc)
+
 
