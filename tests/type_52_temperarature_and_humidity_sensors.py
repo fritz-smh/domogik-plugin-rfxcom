@@ -15,41 +15,9 @@ import traceback
 
 class RfxcomTestCase(PluginTestCase):
 
-    # TODO : test temperature negative :
-    # 520101d60180d7340050
-    #2013-11-02 12:48:52,366 domogik-rfxcom DEBUG Packet informations :
-    #2013-11-02 12:48:52,367 domogik-rfxcom DEBUG - type 52 : temperature and humidity sensor
-    #2013-11-02 12:48:52,367 domogik-rfxcom DEBUG - address = th1 0xd601
-    #2013-11-02 12:48:52,367 domogik-rfxcom DEBUG - model = THGN122/123, THGN132, THGR122/228/238/268
-    #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - temperature = 3298.3
-    #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - humidity = 52
-    #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - humidity status = dry
-    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - battery = 10
-    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - rssi = 31
-
-
-    # TODO : un autre test
-    #2013-11-02 22:26:43,587 domogik-rfxcom DEBUG **** New packet received ****
-    #2013-11-02 22:26:43,588 domogik-rfxcom DEBUG Packet length = 10
-    #2013-11-02 22:26:43,590 domogik-rfxcom DEBUG Packet data = 520100d601001f4d0350
-    #2013-11-02 22:26:43,591 domogik-rfxcom DEBUG Packet type = 52
-    #2013-11-02 22:26:43,591 domogik-rfxcom DEBUG Packet informations :
-    #2013-11-02 22:26:43,592 domogik-rfxcom DEBUG - type 52 : temperature and humidity sensor
-    #2013-11-02 22:26:43,592 domogik-rfxcom DEBUG - address = th1 0xd601
-    #2013-11-02 22:26:43,592 domogik-rfxcom DEBUG - model = THGN122/123, THGN132, THGR122/228/238/268
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - temperature = 3.1
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - humidity = 77
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - humidity status = wet
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - battery = 10
-    #2013-11-02 22:26:43,594 domogik-rfxcom DEBUG - rssi = 31
-
-
-
-
-
-
     def test_0100_type52_temperature_and_humidity_sensor(self):
         """ check if all the xpl messages for a temperature and humidity sensor are sent
+            Example : 
             Rfxcom trame : 520100250400d4470350
             Sample messages : 
  
@@ -69,11 +37,21 @@ class RfxcomTestCase(PluginTestCase):
         interval = 30  # seconds
 
         # set constants for values in xpl messages
+        # th1 0x2504 : 520100250400d4470350
+        # th1 0xd601 : 520101d60180d7340050
         tests = [ {
                      'address' : "th1 0x2504",
                      'temperature' : 21.2,
                      'humidity' : 71,
                      'humidity_desc' : 'wet',
+                     'battery' : 10,
+                     'rssi' : 31
+                  },
+                  {
+                     'address' : "th1 0xd601",
+                     'temperature' : -21.5,
+                     'humidity' : 52,
+                     'humidity_desc' : 'dry',
                      'battery' : 10,
                      'rssi' : 31
                   }]
