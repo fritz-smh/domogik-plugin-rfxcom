@@ -191,7 +191,7 @@ if __name__ == "__main__":
             'device' : '/dev/rfxcom' }
     # specific configuration for test mdode (handled by the manager for plugin startup)
     cfg['test_mode'] = True 
-    cfg['test_option'] = "{0}/352_data.json".format(test_folder)
+    cfg['test_option'] = "{0}/type_52_data.json".format(test_folder)
    
 
     ### start tests

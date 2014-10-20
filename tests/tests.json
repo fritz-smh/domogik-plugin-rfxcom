@@ -1,8 +1,7 @@
 {
-    'XXXXXsts' : {
-        'automatic' : true,
-        'alter_configuration_or_setup' : 'true',
-        'need_hardware' : false,
-        'mock_available' : false
+    "type_52_temperarature_and_humidity_sensors" : {
+        "alter_configuration_or_setup" : true,
+        "need_hardware" : false,
+        "criticity" : "high"
     }
 }

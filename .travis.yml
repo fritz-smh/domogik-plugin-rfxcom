@@ -10,7 +10,7 @@ mysql:
   username: travis
   encoding: utf8
 env:
-  DMG_BRANCH=0.4-candidate
+  DMG_BRANCH=master
   DMG_PLUGIN=rfxcom
 install:
   - cd ~
@@ -20,12 +20,13 @@ install:
   - ~/domogik/src/domogik/tests/travis/travis-install-dependencies.sh
 before_script:
   - ~/domogik/src/domogik/tests/travis/travis-setup-database.sh
+  - ~/domogik/src/domogik/tests/travis/travis-install-domogik-mq.sh
   - ~/domogik/src/domogik/tests/travis/travis-install-domogik.sh
   - ~/domogik/src/domogik/tests/travis/travis-install-plugin.sh
-  - ~/domogik/src/domogik/tests/travis/travis-start-domogik.sh
+  - sudo ~/domogik/src/domogik/tests/travis/travis-start-domogik.sh
 script:
   - cd $TRAVIS_BUILD_DIR
-  - python tests/352_type52_temperarature_and_humidity_sensors.py
+  - dmg_testrunner -a /var/lib/domogik/domogik_packages/plugin_$DMG_PLUGIN/tests/
 after_script:
   - ~/domogik/src/domogik/tests/travis/travis-after-failure.sh
 after_script:
