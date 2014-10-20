@@ -3,7 +3,6 @@
 # the templates are availables in the documentation on http://docs.domogik.org/domogik/dev/en/package_development/plugins/tests/travis_templates.html
 python:
   - "2.7"
-  - "3.3"
 mysql:
   adapter: mysql2
   database: domogik
@@ -27,8 +26,6 @@ before_script:
 script:
   - cd $TRAVIS_BUILD_DIR
   - dmg_testrunner -a /var/lib/domogik/domogik_packages/plugin_$DMG_PLUGIN/tests/
-after_script:
-  - ~/domogik/src/domogik/tests/travis/travis-after-failure.sh
 after_script:
   - ~/domogik/src/domogik/tests/travis/travis-after.sh
 notifications:
