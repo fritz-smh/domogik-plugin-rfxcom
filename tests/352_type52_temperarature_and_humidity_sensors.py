@@ -24,8 +24,8 @@ class RfxcomTestCase(PluginTestCase):
     #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - temperature = 3298.3
     #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - humidity = 52
     #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - humidity status = dry
-    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - battery = 50
-    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - rssi = 0
+    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - battery = 10
+    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - rssi = 31
 
 
     # TODO : un autre test
@@ -40,8 +40,8 @@ class RfxcomTestCase(PluginTestCase):
     #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - temperature = 3.1
     #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - humidity = 77
     #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - humidity status = wet
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - battery = 50
-    #2013-11-02 22:26:43,594 domogik-rfxcom DEBUG - rssi = 0
+    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - battery = 10
+    #2013-11-02 22:26:43,594 domogik-rfxcom DEBUG - rssi = 31
 
 
 
@@ -56,8 +56,8 @@ class RfxcomTestCase(PluginTestCase):
             xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 21.2, 'units': 'c', 'type': 'temp'}
             xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 71, 'type': 'humidity', 'description': 'wet'}
             xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 'wet', 'type': 'status'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 60, 'type': 'battery'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 0, 'type': 'rssi'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 10, 'type': 'battery'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 31, 'type': 'rssi'}
 
             Notice that for this test, the same message will be received from the fake rfxcom device 5 times! 
         """
@@ -66,7 +66,7 @@ class RfxcomTestCase(PluginTestCase):
         global devices
 
         # set interval betwwen each message
-        interval = 10  # seconds
+        interval = 30  # seconds
 
         # set constants for values in xpl messages
         tests = [ {
@@ -74,8 +74,8 @@ class RfxcomTestCase(PluginTestCase):
                      'temperature' : 21.2,
                      'humidity' : 71,
                      'humidity_desc' : 'wet',
-                     'battery' : 60,
-                     'rssi' : 0
+                     'battery' : 10,
+                     'rssi' : 31
                   }]
 
         for test in tests:
@@ -90,6 +90,9 @@ class RfxcomTestCase(PluginTestCase):
 
     def test_feature(self, address, device_id, interval, temperature, humidity, humidity_desc, battery, rssi):
         """ Do the tests 
+            @param address : device address
+            @param device_id : device id
+            @param interval : timeout (max time before we assume the message is not sent)
             @param temperature
             @param humidity
             @param humidity_desc
@@ -98,6 +101,8 @@ class RfxcomTestCase(PluginTestCase):
         """
 
         # test temperature
+        print(u"Device address = {0}".format(address))
+        print(u"Device id = {0}".format(device_id))
         print(u"Check that a message about temperature is sent.")
         
         self.assertTrue(self.wait_for_xpl(xpltype = "xpl-trig",
@@ -231,6 +236,7 @@ if __name__ == "__main__":
             print params['xpl']
             # create
             device_id = td.create_device(params)['id']
+            devices[dev] = device_id
 
     except:
         print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))

@@ -33,7 +33,7 @@
                     },
                     { "description" : "wait",
                       "action" : "wait", 
-                      "delay" : 5
+                      "delay" : 2
                     },
                     { "description" : "length of the next message",
                       "action" : "data-hex", 
@@ -45,7 +45,7 @@
                     },
                     { "description" : "wait",
                       "action" : "wait", 
-                      "delay" : 5
+                      "delay" : 2
                     }
               ]
 }
