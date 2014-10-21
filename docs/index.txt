@@ -8,6 +8,7 @@ Table Of Content
 
     /rfxcom
     /device_type/temperature_humidity
+    /device_type/temperature
     /dev
     /changelog
 
