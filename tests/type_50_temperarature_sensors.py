@@ -15,17 +15,15 @@ import traceback
 
 class RfxcomTestCase(PluginTestCase):
 
-    def test_0100_type52_temperature_and_humidity_sensor(self):
-        """ check if all the xpl messages for a temperature and humidity sensor are sent
+    def test_0100_type50_temperature_sensor(self):
+        """ check if all the xpl messages for a temperature sensor are sent
             Example : 
-            Rfxcom trame : 520100250400d4470350
+            Rfxcom trame : 500110000180BC69
             Sample messages : 
  
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 21.2, 'units': 'c', 'type': 'temp'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 71, 'type': 'humidity', 'description': 'wet'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 'wet', 'type': 'status'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 10, 'type': 'battery'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 31, 'type': 'rssi'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'temp1 0x0001', 'current': 21.2, 'units': 'c', 'type': 'temp'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'temp1 0x0001', 'current': 10, 'type': 'battery'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'temp1 0x0001', 'current': 31, 'type': 'rssi'}
 
             Notice that for this test, the same message will be received from the fake rfxcom device 5 times! 
         """
@@ -37,23 +35,19 @@ class RfxcomTestCase(PluginTestCase):
         interval = 30  # seconds
 
         # set constants for values in xpl messages
-        # th1 0x2504 : 520100250400d4470350
-        # th1 0xd601 : 520101d60180d7340050
+        # temp1 0x0001 : 500110000180BC69
+        # temp1 0xFB01 : 50021DFB0100D770
         tests = [ {
-                     'address' : "th1 0x2504",
-                     'temperature' : 21.2,
-                     'humidity' : 71,
-                     'humidity_desc' : 'wet',
-                     'battery' : 10,
-                     'rssi' : 31
+                     'address' : "temp1 0x0001",
+                     'temperature' : -18.8,
+                     'battery' : 100,
+                     'rssi' : 37
                   },
                   {
-                     'address' : "th1 0xd601",
-                     'temperature' : -21.5,
-                     'humidity' : 52,
-                     'humidity_desc' : 'dry',
+                     'address' : "temp2 0xfb01",
+                     'temperature' : 21.5,
                      'battery' : 10,
-                     'rssi' : 31
+                     'rssi' : 43
                   }]
 
         for test in tests:
@@ -61,19 +55,15 @@ class RfxcomTestCase(PluginTestCase):
                               devices[test['address']], 
                               interval, 
                               test['temperature'], 
-                              test['humidity'], 
-                              test['humidity_desc'], 
                               test['battery'], 
                               test['rssi'])
 
-    def test_feature(self, address, device_id, interval, temperature, humidity, humidity_desc, battery, rssi):
+    def test_feature(self, address, device_id, interval, temperature, battery, rssi):
         """ Do the tests 
             @param address : device address
             @param device_id : device id
             @param interval : timeout (max time before we assume the message is not sent)
             @param temperature
-            @param humidity
-            @param humidity_desc
             @param battery
             @param rssi
         """
@@ -92,20 +82,6 @@ class RfxcomTestCase(PluginTestCase):
                                           timeout = interval))
         print(u"Check that the value of the xPL message has been inserted in database")
         sensor = TestSensor(device_id, "temperature")
-        self.assertTrue(sensor.get_last_value()[1] == self.xpl_data.data['current'])
-
-        # test humidity
-        print(u"Check that a message about humidity is sent.")
-        
-        self.assertTrue(self.wait_for_xpl(xpltype = "xpl-trig",
-                                          xplschema = "sensor.basic",
-                                          xplsource = "domogik-{0}.{1}".format(self.name, get_sanitized_hostname()),
-                                          data = {"type" : "humidity", 
-                                                  "device" : address,
-                                                  "current" : humidity},
-                                          timeout = interval))
-        print(u"Check that the value of the xPL message has been inserted in database")
-        sensor = TestSensor(device_id, "humidity")
         self.assertTrue(sensor.get_last_value()[1] == self.xpl_data.data['current'])
 
         # test battery
@@ -144,10 +120,9 @@ if __name__ == "__main__":
     test_folder = os.path.dirname(os.path.realpath(__file__))
 
     ### global variables
-    #address = "th1 0x2504"
     # the key will be the device address
-    devices = { "th1 0x2504" : 0,
-                "th1 0xd601" : 0
+    devices = { "temp1 0x0001" : 0,
+                "temp2 0xfb01" : 0
               }
 
     ### configuration
@@ -169,7 +144,7 @@ if __name__ == "__main__":
             'device' : '/dev/rfxcom' }
     # specific configuration for test mdode (handled by the manager for plugin startup)
     cfg['test_mode'] = True 
-    cfg['test_option'] = "{0}/type_52_data.json".format(test_folder)
+    cfg['test_option'] = "{0}/type_50_data.json".format(test_folder)
    
 
     ### start tests
@@ -221,7 +196,7 @@ if __name__ == "__main__":
     suite.addTest(RfxcomTestCase("test_0050_start_the_plugin", xpl_plugin, name, cfg))
 
     # do the specific plugin tests
-    suite.addTest(RfxcomTestCase("test_0100_type52_temperature_and_humidity_sensor", xpl_plugin, name, cfg))
+    suite.addTest(RfxcomTestCase("test_0100_type50_temperature_sensor", xpl_plugin, name, cfg))
 
     # do some tests comon to all the plugins
     #suite.addTest(RfxcomTestCase("test_9900_hbeat", xpl_plugin, name, cfg))
