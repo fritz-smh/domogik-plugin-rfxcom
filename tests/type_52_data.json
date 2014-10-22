@@ -1,11 +1,11 @@
 {
     "history" : [
                     { "description" : "bad data (as this happens on startup)",
-                      "action" : "data", 
+                      "action" : "data-hex", 
                       "data" : "61"
                     },
                     { "description" : "bad data (as this happens on startup)",
-                      "action" : "data", 
+                      "action" : "data-hex", 
                       "data" : "0d"
                     },
                     { "description" : "wait",
@@ -13,39 +13,39 @@
                       "delay" : 5
                     },
                     { "description" : "status of the rfxcom",
-                      "action" : "data", 
+                      "action" : "data-hex", 
                       "data" : "010001025344000c2f00000000"
                     },
                     { "description" : "wait",
                       "action" : "wait", 
-                      "delay" : 15
+                      "delay" : 5
                     }
                 ],
     "responses" : {},
     "loop" : [
                     { "description" : "length of the next message",
-                      "action" : "data", 
+                      "action" : "data-hex", 
                       "data" : "0a"
                     },
                     { "description" : "device 2504 : temperature and hygro sensor : positive temperature",
-                      "action" : "data", 
+                      "action" : "data-hex", 
                       "data" : "520100250400d4470350"
                     },
                     { "description" : "wait",
                       "action" : "wait", 
-                      "delay" : 5
+                      "delay" : 2
                     },
                     { "description" : "length of the next message",
-                      "action" : "data", 
+                      "action" : "data-hex", 
                       "data" : "0a"
                     },
                     { "description" : "device d601 : temperature and hygro sensor : negative temperature",
-                      "action" : "data", 
+                      "action" : "data-hex", 
                       "data" : "520101d60180d7340050"
                     },
                     { "description" : "wait",
                       "action" : "wait", 
-                      "delay" : 5
+                      "delay" : 2
                     }
               ]
 }

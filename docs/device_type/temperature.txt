@@ -1,0 +1,33 @@
+===================
+Temperature devices
+===================
+
+Overview
+========
+
+These devices are able to send the temperature. There are many models of them. You can find the list of all the compliant models in the products list of the user interface.
+
+.. image:: temperature_thr128.jpg
+
+Features
+========
+
+These devices has several features:
+
+* temperature
+* battery level
+* RSSI (signal strength) 
+
+
+Configuration
+=============
+
+When you create such a device, you will have to set this parameter:
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+address               string                      The device address. Example: temp1 0xFFFF
+===================== =========================== ======================================================================
+
+

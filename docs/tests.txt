@@ -1,0 +1,15 @@
+=============
+Tests summary
+=============
+
+Some automated tests are used to validate this plugin. They use some fake serial devices.
+
+Here is a summary of the implemented tests and also of the features which have been tested with the RFXCOM device and some real devices.
+
+======================================= =============== ==============================================================
+Feature                                 Automated tests Tests with real devices
+======================================= =============== ==============================================================
+type 50 - temperature                   yes             yes (fritz, Lacrosse)
+--------------------------------------- --------------- --------------------------------------------------------------
+type 52 - temperature and humidity      yes             yes (fritz, Oregon device)
+======================================= =============== ==============================================================

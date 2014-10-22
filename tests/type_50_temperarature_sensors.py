@@ -15,49 +15,15 @@ import traceback
 
 class RfxcomTestCase(PluginTestCase):
 
-    # TODO : test temperature negative :
-    # 520101d60180d7340050
-    #2013-11-02 12:48:52,366 domogik-rfxcom DEBUG Packet informations :
-    #2013-11-02 12:48:52,367 domogik-rfxcom DEBUG - type 52 : temperature and humidity sensor
-    #2013-11-02 12:48:52,367 domogik-rfxcom DEBUG - address = th1 0xd601
-    #2013-11-02 12:48:52,367 domogik-rfxcom DEBUG - model = THGN122/123, THGN132, THGR122/228/238/268
-    #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - temperature = 3298.3
-    #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - humidity = 52
-    #2013-11-02 12:48:52,368 domogik-rfxcom DEBUG - humidity status = dry
-    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - battery = 50
-    #2013-11-02 12:48:52,369 domogik-rfxcom DEBUG - rssi = 0
-
-
-    # TODO : un autre test
-    #2013-11-02 22:26:43,587 domogik-rfxcom DEBUG **** New packet received ****
-    #2013-11-02 22:26:43,588 domogik-rfxcom DEBUG Packet length = 10
-    #2013-11-02 22:26:43,590 domogik-rfxcom DEBUG Packet data = 520100d601001f4d0350
-    #2013-11-02 22:26:43,591 domogik-rfxcom DEBUG Packet type = 52
-    #2013-11-02 22:26:43,591 domogik-rfxcom DEBUG Packet informations :
-    #2013-11-02 22:26:43,592 domogik-rfxcom DEBUG - type 52 : temperature and humidity sensor
-    #2013-11-02 22:26:43,592 domogik-rfxcom DEBUG - address = th1 0xd601
-    #2013-11-02 22:26:43,592 domogik-rfxcom DEBUG - model = THGN122/123, THGN132, THGR122/228/238/268
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - temperature = 3.1
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - humidity = 77
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - humidity status = wet
-    #2013-11-02 22:26:43,593 domogik-rfxcom DEBUG - battery = 50
-    #2013-11-02 22:26:43,594 domogik-rfxcom DEBUG - rssi = 0
-
-
-
-
-
-
-    def test_0100_type52_temperature_and_humidity_sensor(self):
-        """ check if all the xpl messages for a temperature and humidity sensor are sent
-            Rfxcom trame : 520100250400d4470350
+    def test_0100_type50_temperature_sensor(self):
+        """ check if all the xpl messages for a temperature sensor are sent
+            Example : 
+            Rfxcom trame : 500110000180BC69
             Sample messages : 
  
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 21.2, 'units': 'c', 'type': 'temp'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 71, 'type': 'humidity', 'description': 'wet'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 'wet', 'type': 'status'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 60, 'type': 'battery'}
-            xpl-trig : schema:sensor.basic, data:{'device': 'th1 0x2504', 'current': 0, 'type': 'rssi'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'temp1 0x0001', 'current': 21.2, 'units': 'c', 'type': 'temp'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'temp1 0x0001', 'current': 10, 'type': 'battery'}
+            xpl-trig : schema:sensor.basic, data:{'device': 'temp1 0x0001', 'current': 31, 'type': 'rssi'}
 
             Notice that for this test, the same message will be received from the fake rfxcom device 5 times! 
         """
@@ -66,16 +32,22 @@ class RfxcomTestCase(PluginTestCase):
         global devices
 
         # set interval betwwen each message
-        interval = 10  # seconds
+        interval = 30  # seconds
 
         # set constants for values in xpl messages
+        # temp1 0x0001 : 500110000180BC69
+        # temp1 0xFB01 : 50021DFB0100D770
         tests = [ {
-                     'address' : "th1 0x2504",
-                     'temperature' : 21.2,
-                     'humidity' : 71,
-                     'humidity_desc' : 'wet',
-                     'battery' : 60,
-                     'rssi' : 0
+                     'address' : "temp1 0x0001",
+                     'temperature' : -18.8,
+                     'battery' : 100,
+                     'rssi' : 37
+                  },
+                  {
+                     'address' : "temp2 0xfb01",
+                     'temperature' : 21.5,
+                     'battery' : 10,
+                     'rssi' : 43
                   }]
 
         for test in tests:
@@ -83,21 +55,22 @@ class RfxcomTestCase(PluginTestCase):
                               devices[test['address']], 
                               interval, 
                               test['temperature'], 
-                              test['humidity'], 
-                              test['humidity_desc'], 
                               test['battery'], 
                               test['rssi'])
 
-    def test_feature(self, address, device_id, interval, temperature, humidity, humidity_desc, battery, rssi):
+    def test_feature(self, address, device_id, interval, temperature, battery, rssi):
         """ Do the tests 
+            @param address : device address
+            @param device_id : device id
+            @param interval : timeout (max time before we assume the message is not sent)
             @param temperature
-            @param humidity
-            @param humidity_desc
             @param battery
             @param rssi
         """
 
         # test temperature
+        print(u"Device address = {0}".format(address))
+        print(u"Device id = {0}".format(device_id))
         print(u"Check that a message about temperature is sent.")
         
         self.assertTrue(self.wait_for_xpl(xpltype = "xpl-trig",
@@ -109,20 +82,6 @@ class RfxcomTestCase(PluginTestCase):
                                           timeout = interval))
         print(u"Check that the value of the xPL message has been inserted in database")
         sensor = TestSensor(device_id, "temperature")
-        self.assertTrue(sensor.get_last_value()[1] == self.xpl_data.data['current'])
-
-        # test humidity
-        print(u"Check that a message about humidity is sent.")
-        
-        self.assertTrue(self.wait_for_xpl(xpltype = "xpl-trig",
-                                          xplschema = "sensor.basic",
-                                          xplsource = "domogik-{0}.{1}".format(self.name, get_sanitized_hostname()),
-                                          data = {"type" : "humidity", 
-                                                  "device" : address,
-                                                  "current" : humidity},
-                                          timeout = interval))
-        print(u"Check that the value of the xPL message has been inserted in database")
-        sensor = TestSensor(device_id, "humidity")
         self.assertTrue(sensor.get_last_value()[1] == self.xpl_data.data['current'])
 
         # test battery
@@ -161,10 +120,9 @@ if __name__ == "__main__":
     test_folder = os.path.dirname(os.path.realpath(__file__))
 
     ### global variables
-    #address = "th1 0x2504"
     # the key will be the device address
-    devices = { "th1 0x2504" : 0,
-                "th1 0xd601" : 0
+    devices = { "temp1 0x0001" : 0,
+                "temp2 0xfb01" : 0
               }
 
     ### configuration
@@ -186,7 +144,7 @@ if __name__ == "__main__":
             'device' : '/dev/rfxcom' }
     # specific configuration for test mdode (handled by the manager for plugin startup)
     cfg['test_mode'] = True 
-    cfg['test_option'] = "{0}/352_data.json".format(test_folder)
+    cfg['test_option'] = "{0}/type_50_data.json".format(test_folder)
    
 
     ### start tests
@@ -202,15 +160,31 @@ if __name__ == "__main__":
         print(u"Error while deleting all the test device for the client id '{0}' : {1}".format(client_id, traceback.format_exc()))
         sys.exit(1)
 
-    # create the test devices
-    for dev in devices:
-        try:
-            device_id = td.create_device(client_id, "test_device_rfxcom_type52_{0}".format(dev), "rfxcom.temperature_humidity")
-            td.configure_global_parameters({"device" : dev})
+    # create a test device
+    try:
+        params = td.get_params(client_id, "rfxcom.temperature_humidity")
+   
+        for dev in devices:
+            # fill in the params
+            params["device_type"] = "rfxcom.temperature_humidity"
+            params["name"] = "test_device_rfxcom_type52_{0}".format(dev)
+            params["reference"] = "reference"
+            params["description"] = "description"
+            # global params
+            pass # there are no global params for this plugin
+            # xpl params
+            for the_param in params['xpl']:
+                if the_param['key'] == "device":
+                    the_param['value'] = dev
+            print params['xpl']
+            # create
+            device_id = td.create_device(params)['id']
             devices[dev] = device_id
-        except: 
-            print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
-            sys.exit(1)
+
+    except:
+        print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
+        sys.exit(1)
+
     
     ### prepare and run the test suite
     suite = unittest.TestSuite()
@@ -222,7 +196,7 @@ if __name__ == "__main__":
     suite.addTest(RfxcomTestCase("test_0050_start_the_plugin", xpl_plugin, name, cfg))
 
     # do the specific plugin tests
-    suite.addTest(RfxcomTestCase("test_0100_type52_temperature_and_humidity_sensor", xpl_plugin, name, cfg))
+    suite.addTest(RfxcomTestCase("test_0100_type50_temperature_sensor", xpl_plugin, name, cfg))
 
     # do some tests comon to all the plugins
     #suite.addTest(RfxcomTestCase("test_9900_hbeat", xpl_plugin, name, cfg))
@@ -230,8 +204,10 @@ if __name__ == "__main__":
     
     # quit
     res = unittest.TextTestRunner().run(suite)
-    print "force_leave"
-    xpl_plugin.force_leave()
-    print "boom"
-    sys.exit(res.wasSuccessful())
+    if res.wasSuccessful() == True:
+        rc = 0   # tests are ok so the shell return code is 0
+    else:
+        rc = 1   # tests are ok so the shell return code is != 0
+    xpl_plugin.force_leave(return_code = rc)
+
 

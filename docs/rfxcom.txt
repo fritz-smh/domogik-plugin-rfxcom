@@ -7,11 +7,14 @@ Plugin rfxcom
 Purpose
 =======
 
-The rfxcom plugin handled the Rfxcom hardware devices:
+The rfxcom plugin handle the following Rfxcom hardware devices:
 
 * RFXtrx433 USB 433.92MHz Transceiver
+
   .. image:: rfxcom_usb_model.jpg
+
 * RFXLAN Transceiver 433.92 MHz with xPL interface
+
   .. image:: rfxcom_lan_model.jpg
 
 You will get more informations on these devices on the `official RFXCOM website <http://www.rfxcom.com>`_
@@ -21,6 +24,22 @@ Dependencies
 ============
 
 There is no dependency.
+
+Install the RFXCOM usb device
+=============================
+
+Create an udev rule
+-------------------
+
+You may create a udev rule for this device. You can find sample udev rules in the **udev/** folder of this plugin.
+
+You just need to copy the choosen sample file in the folder **/etc/udev/rules.d/** and unplug/plug the device.
+
+Install the RFXCOM xPL LAN device
+=================================
+
+Set up your RFXCOM lan with the xPL firmware (check the RFXCOM LAN module documentation).
+Plug your RFXCOM lan on the same network as your Domogik server.
 
 Plugin configuration
 ====================

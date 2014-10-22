@@ -1,16 +1,16 @@
 # This file is used for automated tests with Travis CI : travis-ci.org
 # based on the template version 1
 # the templates are availables in the documentation on http://docs.domogik.org/domogik/dev/en/package_development/plugins/tests/travis_templates.html
+language: python
 python:
   - "2.7"
-  - "3.3"
 mysql:
   adapter: mysql2
   database: domogik
   username: travis
   encoding: utf8
 env:
-  DMG_BRANCH=0.4-candidate
+  DMG_BRANCH=master
   DMG_PLUGIN=rfxcom
 install:
   - cd ~
@@ -20,14 +20,13 @@ install:
   - ~/domogik/src/domogik/tests/travis/travis-install-dependencies.sh
 before_script:
   - ~/domogik/src/domogik/tests/travis/travis-setup-database.sh
+  - ~/domogik/src/domogik/tests/travis/travis-install-domogik-mq.sh
   - ~/domogik/src/domogik/tests/travis/travis-install-domogik.sh
-  - ~/domogik/src/domogik/tests/travis/travis-install-plugin.sh
-  - ~/domogik/src/domogik/tests/travis/travis-start-domogik.sh
+  - ~/domogik/src/domogik/tests/travis/travis-install-plugin.sh 
+  - sudo ~/domogik/src/domogik/tests/travis/travis-start-domogik.sh
 script:
   - cd $TRAVIS_BUILD_DIR
-  - python tests/352_type52_temperarature_and_humidity_sensors.py
-after_script:
-  - ~/domogik/src/domogik/tests/travis/travis-after-failure.sh
+  - dmg_testrunner -a /var/lib/domogik/domogik_packages/plugin_$DMG_PLUGIN/tests/
 after_script:
   - ~/domogik/src/domogik/tests/travis/travis-after.sh
 notifications:
