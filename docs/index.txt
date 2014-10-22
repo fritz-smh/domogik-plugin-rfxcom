@@ -10,5 +10,6 @@ Table Of Content
     /device_type/temperature_humidity
     /device_type/temperature
     /dev
+    /tests
     /changelog
 

@@ -6,3 +6,17 @@ Developments are based on 2 documents:
 
 * RFXtrx SDK.pdf: the SDF for the usb model. It describes all handled hardware and how to use them with the rfxcom device. This file can be ask to RFXCOM support.
 * RFXCOM implementation xPL.pdf: the specification of the used xPL messages for the lan model. To be compliant, we used these messages also for the usb model. This file is available on the official website.
+
+Timeout on sensors
+==================
+
+type 50 - temperature sensors
+-----------------------------
+
+The timeout is set to 10 minutes. Most of the sensors send data each minute, but it may happen that some data are lost from time to time, so we choose to set the timeout to 10 minutes to allow several errors.
+
+type 52 - temperature and humidity sensors
+------------------------------------------
+
+The timeout is set to 10 minutes. Most of the sensors send data each minute, but it may happen that some data are lost from time to time, so we choose to set the timeout to 10 minutes to allow several errors.
+
