@@ -36,6 +36,7 @@ Implements
 """
 
 from domogik.xpl.common.xplmessage import XplMessage
+from domogik.xpl.common.xplconnector import Listener
 from domogik.xpl.common.plugin import XplPlugin
 
 from domogik_packages.plugin_rfxcom.lib.rfxcom import Rfxcom
@@ -68,7 +69,11 @@ class RfxcomManager(XplPlugin):
         self.rfxcom_manager = Rfxcom(self.log, self.send_xpl, self.get_stop(), self.rfxcom_device, self.device_detected, self.send_xpl, self.register_thread, self.options.test_option)
 
         # create listeners for commands send over xPL
-        # TODO
+        # type 11 - Lighting 2
+        Listener(self.process_ac_basic, self.myxpl,
+                 {'schema': 'ac.basic',
+                  'xpltype': 'xpl-cmnd'})
+
 
         # Open the RFXCOM device
         try:
@@ -107,6 +112,41 @@ class RfxcomManager(XplPlugin):
                 msg.add_data({key : data[key]})
             self.myxpl.send(msg)
 
+
+    def process_ac_basic(self, message):
+        """ Process command xpl message and call the librairy for processing command
+            @param message : xpl message
+
+            type 11 - Lighting 2
+            Example xPL messages: 
+            $ ./send.py xpl-cmnd ac.basic "address=0x0038abfe,unit=10,command=off"
+            $ ./send.py xpl-cmnd ac.basic "address=0x0038abfe,unit=10,command=on"
+            $ ./send.py xpl-cmnd ac.basic "address=0x0038abfe,unit=10,command=preset,level=1"
+        """
+        address = message.data["address"].lower()
+        unit = message.data["unit"]
+        if unit.lower() == "group":
+            unit = 0
+            group = True
+        else:
+            unit = int(unit)
+            group = False
+        command = message.data["command"].lower()
+        if command == "preset":
+            level = int(message.data["level"])
+        else:
+            level = 0
+        if message.data.has_key("eu"):
+            eu = message.data["eu"]
+        else:
+            eu = False
+        # Prepare xpl-trig to send if success
+        trig_msg = message
+        trig_msg.set_type("xpl-trig")
+        # Use the rfxcom
+        if self.rfxcom_manager.command_11(address, unit, command, level, eu, group, trig_msg):
+            self.myxpl.send(trig_msg)
+            
 
 
 if __name__ == "__main__":

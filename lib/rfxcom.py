@@ -495,6 +495,55 @@ class Rfxcom:
 
 
 
+    def command_11(self, address, unit, command, level, eu, group, trig_msg):
+        """ Type 0x11, Lighting2
+            Last update : 1.68
+
+            Remarks :
+            - eu != true : Chacon, KlikAanKlikUit, HomeEasy UK, NEXA
+            - eu = true : HomeEasy EU
+            - ANSLUT is the same as Chacon. But the address must have a special
+              address, not all addresses are accepted in fact. The user has to
+              try addresses and change the lowest address digit until the ANSLUT              responds.
+        """
+        COMMAND = {"off"    : "00",
+                   "on"     : "01",
+                   "preset" : "02",
+                   "group_off"    : "03",
+                   "group_on"     : "04",
+                   "group_preset" : "05"}
+        try:
+            # type
+            cmd = "11"
+            # subtype
+            if eu != True:
+                cmd += "00"
+            else:
+                cmd += "01"
+            # Note : ANSLUT not implemented (view remark in function header
+            # seqnbr
+            cmd += self.get_seqnbr()
+            # address
+            cmd += "%08x" % int(bin(int(address, 16)), 2)
+            # unit code
+            cmd += "%02x" % unit
+            # cmnd
+            if group == True:
+                command = "group_" + command
+            cmd += COMMAND[command.lower()]
+            # level
+            cmd += "%02x" % level
+            # filler + rssi : 0x00
+            cmd += "00"
+    
+            self.log.debug("Type 11 - lignting2 : write {0}".format(cmd))
+            self.write_packet(cmd, trig_msg)
+            return True
+        except:
+            self.log.error("Error while processing command for type 11 : {0}".format(traceback.format_exc()))
+            return False
+
+
     def _process_50(self, data):
         """ Temperature sensors
             Last update : 1.68
