@@ -533,6 +533,12 @@ class Rfxcom:
             subtype_desc = "unknown subtype !!!"
             self.log.error("Bad message received from RFXCOM : {0}".format(data))
 
+        # debug informations
+        self.log.debug("Packet informations :")
+        self.log.debug("- type 02 : Responses or messages send by the receiver or transmitter")
+        self.log.debug("- subtype = {0}. {1}".format(subtype, subtype_desc))
+        self.log.debug("- message = {0}. {1}".format(msg, msg_desc))
+
         # if message successfully processed by the RFXCOM, write an 'ACK' to the response queue
         if ack:
             self.rfx_response.put_nowait({"seqnbr" : seqnbr, 
@@ -544,11 +550,6 @@ class Rfxcom:
                                           "packet" : data,
                                           "status" : "NACK"})
 
-        # debug informations
-        self.log.debug("Packet informations :")
-        self.log.debug("- type 02 : Responses or messages send by the receiver or transmitter")
-        self.log.debug("- subtype = {0}. {1}".format(subtype, subtype_desc))
-        self.log.debug("- message = {0}. {1}".format(msg, msg_desc))
 
     def command_11(self, address, unit, command, level, eu, group, trig_msg):
         """ Type 0x11, Lighting2
@@ -591,7 +592,7 @@ class Rfxcom:
             # filler + rssi : 0x00
             cmd += "00"
     
-            self.log.debug("Type 11 - lignting2 : write {0}".format(cmd))
+            self.log.debug("Type 11 - lighting2 : write {0}".format(cmd))
             self.write_packet(cmd, trig_msg)
             return True
         except:

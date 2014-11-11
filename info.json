@@ -290,9 +290,46 @@
             "type": "string"
         }
     ], 
-    "commands": {},
-    "xpl_commands": {}, 
+    "commands": {
+        "lighting2_switch" : {
+            "name" : "Swith",
+            "return_confirmation" : true,
+            "parameters" : [
+                {
+                    "key" : "command",
+                    "data_type" : "DT_Switch",
+                    "conversion" : "from_DT_Switch_to_off_on"
+                }
+            ],
+            "xpl_command" : "lighting2_switch"
+        }
+    },
+    "xpl_commands": {
+        "lighting2_switch" : {
+            "name": "lighting2_switch",
+            "schema": "ac.basic",
+            "xplstat_name": "lighting2_switch",
+            "parameters": {
+                "static": [],
+                "device": []
+            }
+        }
+    }, 
     "sensors": {
+        "lighting2_switch": {
+            "name": "Switch",
+            "incremental" : false,
+            "data_type": "DT_Number",
+            "conversion" : "from_off_on_to_DT_Switch",
+            "timeout" : 0,
+            "history": {
+                "store": true,
+                "duplicate" : false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        },
         "temperature": {
             "name": "Temperature",
             "incremental" : false,
@@ -351,6 +388,21 @@
         }
     },
     "xpl_stats": {
+       "lighting2_switch": {
+            "name": "Switch",
+            "schema": "ac.basic",
+            "parameters": {
+                "static": [],
+                "device": [],
+                "dynamic": [
+                    {
+                        "key": "command",
+                        "ignore_values": "",
+                        "sensor": "lighting2_switch"
+                    }
+                ]
+            }
+       },
        "temperature": {
             "name": "Temperature",
             "schema": "sensor.basic",
@@ -462,18 +514,39 @@
                     "type": "string"
                 }
             ]
+        },
+        "rfxcom.lighting_2": {
+            "description": "", 
+            "id": "rfxcom.lighting_2", 
+            "name": "Lighting : Chacon, DIO, AC, HomeEasy EU, ANSLUT",
+            "commands": ["lighting2_switch"],
+            "sensors": ["lighting2_switch"],
+            "parameters": [
+                {
+                    "key": "address",
+                    "xpl" : true,
+                    "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
+                    "type": "string"
+                },
+                {
+                    "key": "unit",
+                    "xpl" : true,
+                    "description": "Device unit (1..16). Example: 3",
+                    "type": "integer"
+                }
+            ]
         }
     }, 
     "identity": {
         "author": "Fritz", 
         "author_email": "fritz.smh at gmail.com", 
-        "tags": ["rfxcom", "temperature", "humidity", "oregon", "lacrosse"], 
+        "tags": ["rfxcom", "temperature", "humidity", "oregon", "lacrosse", "lighting", "chacon", "dio"], 
         "dependencies": [], 
         "description": "Rfxcom plugin for usb Rfxcom model", 
         "domogik_min_version": "0.4.0", 
         "name": "rfxcom", 
         "type": "plugin", 
-        "version": "1.68.1"
+        "version": "1.68.2"
     }, 
     "json_version": 2
 }

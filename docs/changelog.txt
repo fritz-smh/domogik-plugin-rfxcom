@@ -2,6 +2,11 @@
 Changelog
 =========
 
+1.68.2
+======
+
+* New feature : lighting 2 (type 11) : AC, HomeEasy EU, ANSLUT. AC is the protocol used by different brands with units having a learning mode button: KlikAanKlikUit, NEXA, CHACON, HomeEasy UK
+
 1.68.1
 ======
 
