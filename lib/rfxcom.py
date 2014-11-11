@@ -295,9 +295,10 @@ class Rfxcom:
             self.rfxcom.write(binascii.unhexlify(packet))
 
             # TODO : improve to be sure the response is related to the written message (with seqnmbr)
+            # TODO : add a counter to avoid eternal loop
             loop = True
             while loop == True:
-                res = self.response_rfx.get(block = True)
+                res = self.rfx_response.get(block = True)
                 if res["status"] == "NACK":
                     self.debug.warning("Failed to write. Retry in %s : %s > %s" % (WAIT_BETWEEN_TRIES, seqnbr, packet))
                     time.sleep(WAIT_BETWEEN_TRIES)
@@ -534,12 +535,12 @@ class Rfxcom:
 
         # if message successfully processed by the RFXCOM, write an 'ACK' to the response queue
         if ack:
-            self.response_rfx.put_nowait({"seqnbr" : seqnbr, 
+            self.rfx_response.put_nowait({"seqnbr" : seqnbr, 
                                           "packet" : data,
                                           "status" : "ACK"})
         # else, write a NACK
         else:
-            self.response_rfx.put_nowait({"seqnbr" : seqnbr, 
+            self.rfx_response.put_nowait({"seqnbr" : seqnbr, 
                                           "packet" : data,
                                           "status" : "NACK"})
 
