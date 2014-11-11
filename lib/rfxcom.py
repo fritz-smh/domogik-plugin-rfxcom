@@ -294,7 +294,7 @@ class Rfxcom:
             self.log.debug("Get from Queue : %s > %s" % (seqnbr, packet))
             self.rfxcom.write(binascii.unhexlify(packet))
 
-            # TODO : read in queue in which has been stored data readen from rfx
+            # TODO : improve to be sure the response is related to the written message (with seqnmbr)
             loop = True
             while loop == True:
                 res = self.rfx_response.get(block = True)
@@ -499,29 +499,49 @@ class Rfxcom:
             Last update : 1.68
         """
         subtype = gh(data, 1)
-        if subtype == "00":
-            subtype_desc = "error, receiver did not lock"
-        elif subtype == "01":
-            subtype_desc = "transmitter response"
-        else:
-            subtype_desc = "unknown subtype !!!"
-            self.log.error("Bad message received from RFXCOM : {0}".format(data))
         seqnbr = gh(data, 2)
         msg = gh(data, 3)
-        if msg == "00":
-            msg_desc = "ACK, transmit OK"
-        elif msg == "01":
-            msg_desc = "ACK, but transmit started after 3 seconds delay anyway with RF receive data"
-            self.log.warning("Response from RFXCOM : ACK, but transmit started after 3 seconds delay anyway with RF receive data")
-        elif msg == "02":
-            msg_desc = "NAK, transmitter did not lock on the requested transmit frequency"
-            self.log.error("Response from RFXCOM : NAK, transmitter did not lock on the requested transmit frequency")
-        elif msg == "03":
-            msg_desc = "NAK, AC address zero in id1-id4 not allowed"
-            self.log.error("Response from RFXCOM : NAK, AC address zero in id1-id4 not allowed")
+
+        if subtype == "00":
+            ack = False
+            subtype_desc = "error, receiver did not lock"
+            self.error.log("Response from RFXCOM : error, receiver did not lock")
+        elif subtype == "01":
+            subtype_desc = "transmitter response"
+            if msg == "00":
+                ack = True
+                msg_desc = "ACK, transmit OK"
+            elif msg == "01":
+                ack = True
+                msg_desc = "ACK, but transmit started after 3 seconds delay anyway with RF receive data"
+                self.log.warning("Response from RFXCOM : ACK, but transmit started after 3 seconds delay anyway with RF receive data")
+            elif msg == "02":
+                ack = False
+                msg_desc = "NAK, transmitter did not lock on the requested transmit frequency"
+                self.log.error("Response from RFXCOM : NAK, transmitter did not lock on the requested transmit frequency")
+            elif msg == "03":
+                ack = False
+                msg_desc = "NAK, AC address zero in id1-id4 not allowed"
+                self.log.error("Response from RFXCOM : NAK, AC address zero in id1-id4 not allowed")
+            else:
+                ack = False
+                msg_desc = "unknown message !!!"
+                self.log.error("Bad message received from RFXCOM : {0}".format(data))
         else:
-            msg_desc = "unknown message !!!"
+            ack = False
+            subtype_desc = "unknown subtype !!!"
             self.log.error("Bad message received from RFXCOM : {0}".format(data))
+
+        # if message successfully processed by the RFXCOM, write an 'ACK' to the response queue
+        if ack:
+            self.response_rfx.put_nowait({"seqnbr" : seqnbr, 
+                                          "packet" : data,
+                                          "status" : "ACK"})
+        # else, write a NACK
+        else:
+            self.response_rfx.put_nowait({"seqnbr" : seqnbr, 
+                                          "packet" : data,
+                                          "status" : "NACK"})
 
         # debug informations
         self.log.debug("Packet informations :")
