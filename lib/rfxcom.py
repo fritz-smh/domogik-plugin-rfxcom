@@ -494,6 +494,40 @@ class Rfxcom:
 
 
 
+    def _process_02(self, data):
+        """ Receiver/Transmitter Message : Responses or messages send by the receiver or transmitter.
+            Last update : 1.68
+        """
+        subtype = gh(data, 1)
+        if subtype == "00":
+            subtype_desc = "error, receiver did not lock"
+        elif subtype == "01":
+            subtype_desc = "transmitter response"
+        else:
+            subtype_desc = "unknown subtype !!!"
+            self.log.error("Bad message received from RFXCOM : {0}".format(data))
+        seqnbr = gh(data, 2)
+        msg = gh(data, 3)
+        if msg == "00":
+            msg_desc = "ACK, transmit OK"
+        elif msg == "01":
+            msg_desc = "ACK, but transmit started after 3 seconds delay anyway with RF receive data"
+            self.log.warning("Response from RFXCOM : ACK, but transmit started after 3 seconds delay anyway with RF receive data")
+        elif msg == "02":
+            msg_desc = "NAK, transmitter did not lock on the requested transmit frequency"
+            self.log.error("Response from RFXCOM : NAK, transmitter did not lock on the requested transmit frequency")
+        elif msg == "03":
+            msg_desc = "NAK, AC address zero in id1-id4 not allowed"
+            self.log.error("Response from RFXCOM : NAK, AC address zero in id1-id4 not allowed")
+        else:
+            msg_desc = "unknown message !!!"
+            self.log.error("Bad message received from RFXCOM : {0}".format(data))
+
+        # debug informations
+        self.log.debug("Packet informations :")
+        self.log.debug("- type 02 : Responses or messages send by the receiver or transmitter")
+        self.log.debug("- subtype = {0}. {1}".format(subtype, subtype_desc))
+        self.log.debug("- message = {0}. {1}".format(msg, msg_desc))
 
     def command_11(self, address, unit, command, level, eu, group, trig_msg):
         """ Type 0x11, Lighting2
