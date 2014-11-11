@@ -1,4 +1,4 @@
-def from_DT_Switch_to_off_on(x):
+def from_off_on_to_DT_Switch(x):
     # off - on translated to 0 - 1
     if x == "off":
         return 0

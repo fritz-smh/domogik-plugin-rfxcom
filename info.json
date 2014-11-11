@@ -319,7 +319,7 @@
         "lighting2_switch": {
             "name": "Switch",
             "incremental" : false,
-            "data_type": "DT_Number",
+            "data_type": "DT_Switch",
             "conversion" : "from_off_on_to_DT_Switch",
             "timeout" : 0,
             "history": {
