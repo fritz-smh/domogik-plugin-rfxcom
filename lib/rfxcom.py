@@ -297,7 +297,7 @@ class Rfxcom:
             # TODO : improve to be sure the response is related to the written message (with seqnmbr)
             loop = True
             while loop == True:
-                res = self.rfx_response.get(block = True)
+                res = self.response_rfx.get(block = True)
                 if res["status"] == "NACK":
                     self.debug.warning("Failed to write. Retry in %s : %s > %s" % (WAIT_BETWEEN_TRIES, seqnbr, packet))
                     time.sleep(WAIT_BETWEEN_TRIES)
