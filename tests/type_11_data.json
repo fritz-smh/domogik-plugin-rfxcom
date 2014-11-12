@@ -24,7 +24,23 @@
     "responses" : [
                     { "description" : "Request to switch on a type 11 with address = 0x0038abfe and unit = 10",
                       "action" : "data-hex", 
-                      "written" : "0B1100000038ABFE0A010000",
+                      "written" : "0b1100010038abfe0a010000",
+                      "responses" : [
+                        {
+                          "type": "data-hex",
+                          "delay" : 0,
+                          "data" : "04"
+                        },
+                        {
+                          "type": "data-hex",
+                          "delay" : 0,
+                          "data" : "02010000"
+                        }
+                      ]
+                    },
+                    { "description" : "Request to switch off a type 11 with address = 0x0038abfe and unit = 10",
+                      "action" : "data-hex", 
+                      "written" : "0b1100000038abfe0a010000",
                       "responses" : [
                         {
                           "type": "data-hex",
@@ -40,26 +56,6 @@
                     }
     ],
     "loop" : [
-                    { "description" : "length of the next message",
-                      "action" : "data-hex", 
-                      "data" : "08"
-                    },
-                    { "description" : "device 0001 : temperature sensor : negative temperature",
-                      "action" : "data-hex", 
-                      "data" : "500110000180BC69"
-                    },
-                    { "description" : "wait",
-                      "action" : "wait", 
-                      "delay" : 5
-                    },
-                    { "description" : "length of the next message",
-                      "action" : "data-hex", 
-                      "data" : "08"
-                    },
-                    { "description" : "device FB01 : temperature sensor : positive temperature",
-                      "action" : "data-hex", 
-                      "data" : "50021DFB0100D770"
-                    },
                     { "description" : "wait",
                       "action" : "wait", 
                       "delay" : 5
