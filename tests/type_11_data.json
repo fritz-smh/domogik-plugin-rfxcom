@@ -1,0 +1,68 @@
+{
+    "history" : [
+                    { "description" : "bad data (as this happens on startup)",
+                      "action" : "data-hex", 
+                      "data" : "61"
+                    },
+                    { "description" : "bad data (as this happens on startup)",
+                      "action" : "data-hex", 
+                      "data" : "0d"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    },
+                    { "description" : "status of the rfxcom",
+                      "action" : "data-hex", 
+                      "data" : "010001025344000c2f00000000"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    }
+                ],
+    "responses" : [
+                    { "description" : "Request to switch on a type 11 with address = 0x0038abfe and unit = 10",
+                      "action" : "data-hex", 
+                      "written" : "0B1100000038ABFE0A010000",
+                      "responses" : [
+                        {
+                          "type": "data-hex",
+                          "delay" : 0,
+                          "data" : "04"
+                        },
+                        {
+                          "type": "data-hex",
+                          "delay" : 0,
+                          "data" : "02010000"
+                        }
+                      ]
+                    }
+    ],
+    "loop" : [
+                    { "description" : "length of the next message",
+                      "action" : "data-hex", 
+                      "data" : "08"
+                    },
+                    { "description" : "device 0001 : temperature sensor : negative temperature",
+                      "action" : "data-hex", 
+                      "data" : "500110000180BC69"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    },
+                    { "description" : "length of the next message",
+                      "action" : "data-hex", 
+                      "data" : "08"
+                    },
+                    { "description" : "device FB01 : temperature sensor : positive temperature",
+                      "action" : "data-hex", 
+                      "data" : "50021DFB0100D770"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    }
+              ]
+}
