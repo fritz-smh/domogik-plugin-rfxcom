@@ -674,7 +674,7 @@ class Rfxcom:
                                     type = "xpl_stats",
                                     feature = feature,
                                     data = {"address" : address,
-                                            "unit" : unit,
+                                            "unit" : unit_code,
                                             "reference" : "{0} (lighting2)".format(subtype_desc)})
  
 
