@@ -668,10 +668,14 @@ class Rfxcom:
                         "command" : AC_CMND[cmnd],
                         "rssi" : rssi})
 
-        #self.cb_send_xpl(schema = "sensor.basic",
-        #               data = {"device" : address, 
-        #                "type" : "rssi", 
-        #                "current" : rssi})
+        # handle device features detection
+        for feature in ['lighting2_switch']:
+            self.cb_device_detected(device_type = "rfxcom.lighting2_switch", 
+                                    type = "xpl_stats",
+                                    feature = feature,
+                                    data = {"address" : address,
+                                            "unit" : unit,
+                                            "reference" : "{0} (lighting2)".format(subtype_desc)})
  
 
 
@@ -734,6 +738,7 @@ class Rfxcom:
                                     feature = feature,
                                     data = {"device" : address,
                                             "reference" : model})
+        # TODO : and why not rssi, battery ?
 
     def _process_52(self, data):
         """ Temperature and humidity sensors
@@ -807,6 +812,7 @@ class Rfxcom:
                                     feature = feature,
                                     data = {"device" : address,
                                             "reference" : model})
+        # TODO : and why not rssi, battery ?
 
 
 
