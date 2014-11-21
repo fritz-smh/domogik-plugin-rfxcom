@@ -1,0 +1,39 @@
+{
+    "history" : [
+                    { "description" : "bad data (as this happens on startup)",
+                      "action" : "data-hex", 
+                      "data" : "61"
+                    },
+                    { "description" : "bad data (as this happens on startup)",
+                      "action" : "data-hex", 
+                      "data" : "0d"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    },
+                    { "description" : "status of the rfxcom",
+                      "action" : "data-hex", 
+                      "data" : "010001025344000c2f00000000"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    }
+                ],
+    "responses" : {},
+    "loop" : [
+                    { "description" : "length of the next message",
+                      "action" : "data-hex", 
+                      "data" : "0B"
+                    },
+                    { "description" : "device 0109B52 unit 11 : lighting2 sensor : AC, state : off, signal level 8",
+                      "action" : "data-hex", 
+                      "data" : "11000600109B520B000080"
+                    },
+                    { "description" : "wait",
+                      "action" : "wait", 
+                      "delay" : 5
+                    }
+              ]
+}

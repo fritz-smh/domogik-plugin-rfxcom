@@ -571,11 +571,12 @@ class Rfxcom:
             # type
             cmd = "11"
             # subtype
+            # Note : ANSLUT not implemented view remark in function header
             if eu != True:
-                cmd += "00"
+                subtype = "00"
             else:
-                cmd += "01"
-            # Note : ANSLUT not implemented (view remark in function header
+                subtype = "01"
+            cmd += subtype
             # seqnbr
             cmd += self.get_seqnbr()
             # address
@@ -591,12 +592,87 @@ class Rfxcom:
             # filler + rssi : 0x00
             cmd += "00"
     
+            self.log.debug(u"Packet informations :")
             self.log.debug(u"Type 11 - lighting2 : write {0}".format(cmd))
+            self.log.debug(u"- subtype = {0}".format(subtype))
+            self.log.debug(u"- address = {0}".format(address))
+            self.log.debug(u"- unit code = {0}".format(unit))
+            self.log.debug(u"- command = {0}".format(command))
+            self.log.debug(u"- group = {0}".format(group))
+            self.log.debug(u"- level = {0}".format(level))
             self.write_packet(cmd, trig_msg)
             return True
         except:
             self.log.error(u"Error while processing command for type 11 : {0}".format(traceback.format_exc()))
             return False
+
+
+    def _process_11(self, data):
+        """ Type 0x11, Lighting2
+            Last update : 1.68 
+        """
+        AC_CMND = {
+          "00" : "off",
+          "01" : "on",
+          "02" : "preset",
+          "03" : "off",
+          "04" : "on",
+          "05" : "Set group level",
+        }
+        AC_TYPE = {
+          "00" : "AC",
+          "01" : "HomeEasy EU",
+          "02" : "ANSLUT"
+        }
+
+        subtype = gh(data, 1)
+        subtype_desc = AC_TYPE[subtype]
+        seqnbr = gh(data, 2)
+
+        # device address
+        id = gh(data, 3,4)
+        address = "0x%s" %(id)
+        unit_code = int(gh(data, 7), 16)
+
+        # command and level
+        cmnd = gh(data, 8)
+        level = int(gh(data, 9), 16)
+
+        # barrery, rssi
+        # no battery : only a filler
+        #battery = int(gh(data, 7)[0], 16) * 10  # percent
+        rssi = int(gh(data, 7)[1], 16) * 100/16 # percent
+
+        # debug informations
+        self.log.debug(u"Packet informations :")
+        self.log.debug(u"- type 11 : lighting2 command/sensor")
+        self.log.debug(u"- subtype = {0} : {1}".format(subtype, subtype_desc))
+        self.log.debug(u"- address = {0}".format(address))
+        self.log.debug(u"- unit code = {0}".format(unit_code))
+        self.log.debug(u"- command = {0} : {1}".format(cmnd, AC_CMND[cmnd]))
+        self.log.debug(u"- level = {0}".format(level))
+        self.log.debug(u"- battery = n/a")
+        self.log.debug(u"- rssi = {0}".format(rssi))
+
+        if AC_CMND[cmnd] == "preset":
+            self.cb_send_xpl(schema = "ac.basic",
+                       data = {"address" : address, 
+                        "unit" : unit_code,
+                        "command" : AC_CMND[cmnd],
+                        "level" : level,
+                        "rssi" : rssi})
+        else:
+            self.cb_send_xpl(schema = "ac.basic",
+                       data = {"address" : address, 
+                        "unit" : unit_code,
+                        "command" : AC_CMND[cmnd],
+                        "rssi" : rssi})
+
+        #self.cb_send_xpl(schema = "sensor.basic",
+        #               data = {"device" : address, 
+        #                "type" : "rssi", 
+        #                "current" : rssi})
+ 
 
 
     def _process_50(self, data):

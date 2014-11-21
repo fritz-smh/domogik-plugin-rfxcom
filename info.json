@@ -396,6 +396,11 @@
                 "device": [],
                 "dynamic": [
                     {
+                        "key": "rssi",
+                        "ignore_values": "",
+                        "sensor": "rssi"
+                    },
+                    {
                         "key": "command",
                         "ignore_values": "",
                         "sensor": "lighting2_switch"
@@ -520,7 +525,7 @@
             "id": "rfxcom.lighting_2", 
             "name": "Lighting : Chacon, DIO, AC, HomeEasy EU, ANSLUT",
             "commands": ["lighting2_switch"],
-            "sensors": ["lighting2_switch"],
+            "sensors": ["lighting2_switch", "rssi"],
             "parameters": [
                 {
                     "key": "address",
