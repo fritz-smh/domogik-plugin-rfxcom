@@ -291,7 +291,7 @@
         }
     ], 
     "commands": {
-        "lighting2_switch" : {
+        "switch_lighting2" : {
             "name" : "Swith",
             "return_confirmation" : true,
             "parameters" : [
@@ -301,14 +301,14 @@
                     "conversion" : "from_DT_Switch_to_off_on"
                 }
             ],
-            "xpl_command" : "lighting2_switch"
+            "xpl_command" : "switch_lighting2"
         }
     },
     "xpl_commands": {
-        "lighting2_switch" : {
-            "name": "lighting2_switch",
+        "switch_lighting2" : {
+            "name": "switch_lighting2",
             "schema": "ac.basic",
-            "xplstat_name": "lighting2_switch",
+            "xplstat_name": "switch_lighting2",
             "parameters": {
                 "static": [],
                 "device": []
@@ -316,7 +316,7 @@
         }
     }, 
     "sensors": {
-        "lighting2_switch": {
+        "switch_lighting2": {
             "name": "Switch",
             "incremental" : false,
             "data_type": "DT_Switch",
@@ -388,7 +388,7 @@
         }
     },
     "xpl_stats": {
-       "lighting2_switch": {
+       "switch_lighting2": {
             "name": "Switch",
             "schema": "ac.basic",
             "parameters": {
@@ -403,7 +403,7 @@
                     {
                         "key": "command",
                         "ignore_values": "",
-                        "sensor": "lighting2_switch"
+                        "sensor": "switch_lighting2"
                     }
                 ]
             }
@@ -520,12 +520,33 @@
                 }
             ]
         },
-        "rfxcom.lighting_2": {
+        "rfxcom.switch_lighting_2": {
             "description": "", 
-            "id": "rfxcom.lighting_2", 
+            "id": "rfxcom.switch_lighting_2", 
             "name": "Lighting : Chacon, DIO, AC, HomeEasy EU, ANSLUT",
-            "commands": ["lighting2_switch"],
-            "sensors": ["lighting2_switch", "rssi"],
+            "commands": ["switch_lighting2"],
+            "sensors": ["switch_lighting2", "rssi"],
+            "parameters": [
+                {
+                    "key": "address",
+                    "xpl" : true,
+                    "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
+                    "type": "string"
+                },
+                {
+                    "key": "unit",
+                    "xpl" : true,
+                    "description": "Device unit (1..16). Example: 3",
+                    "type": "integer"
+                }
+            ]
+        },
+        "rfxcom.door_window_lighting_2": {
+            "description": "", 
+            "id": "rfxcom.door_window_lighting_2", 
+            "name": "Door/window sensor : Chacon, ...",
+            "commands": [],
+            "sensors": ["switch_lighting2", "rssi"],
             "parameters": [
                 {
                     "key": "address",
