@@ -1,6 +1,6 @@
 def from_DT_Switch_to_off_on(x):
     # 0 - 1 translated to off / on
-    if x == "0":
+    if str(x) == "0":
         return "off"
     else:
         return "on"
