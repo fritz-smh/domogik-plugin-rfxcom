@@ -100,11 +100,11 @@ class RfxcomManager(XplPlugin):
         """ Send xPL message on network
         """
         if message != None:
-            self.log.debug("send_xpl : send full message : {0}".format(message))
+            self.log.debug(u"send_xpl : send full message : {0}".format(message))
             self.myxpl.send(message)
 
         else:
-            self.log.debug("send_xpl : Send xPL message xpl-trig : schema:{0}, data:{1}".format(schema, data))
+            self.log.debug(u"send_xpl : Send xPL message xpl-trig : schema:{0}, data:{1}".format(schema, data))
             msg = XplMessage()
             msg.set_type("xpl-trig")
             msg.set_schema(schema)

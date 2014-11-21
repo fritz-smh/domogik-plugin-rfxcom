@@ -171,33 +171,33 @@ class Rfxcom:
 
         """
         try:
-            self.log.info("**** Open RFXCOM ****")
+            self.log.info(u"**** Open RFXCOM ****")
             if self.fake_device != None:
-                self.log.info("Try to open fake RFXCOM : %s" % self.fake_device)
+                self.log.info(u"Try to open fake RFXCOM : %s" % self.fake_device)
                 self.rfxcom = testserial.Serial(self.fake_device, baudrate = 38400, parity = testserial.PARITY_NONE, stopbits = testserial.STOPBITS_ONE, timeout = 5)
             else:
-                self.log.info("Try to open RFXCOM : %s" % self.rfxcom_device)
+                self.log.info(u"Try to open RFXCOM : %s" % self.rfxcom_device)
                 self.rfxcom = serial.Serial(self.rfxcom_device, baudrate = 38400, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE, timeout = 5)
-            self.log.info("RFXCOM opened")
-            self.log.info("**** Set up the RFXCOM ****")
+            self.log.info(u"RFXCOM opened")
+            self.log.info(u"**** Set up the RFXCOM ****")
             reset_message = "0D00000000000000000000000000"
-            self.log.info("Send 'reset' message : {0}".format(reset_message))
+            self.log.info(u"Send 'reset' message : {0}".format(reset_message))
             self.rfxcom.write(binascii.unhexlify(reset_message))
-            self.log.info("Wait 2 seconds...")
+            self.log.info(u"Wait 2 seconds...")
             time.sleep(2)
-            self.log.info("Flush the serial port")
+            self.log.info(u"Flush the serial port")
             self.rfxcom.flush()
             get_status_message = "0D00000102000000000000000000"
-            self.log.info("Send 'get status' message : {0}".format(get_status_message))
+            self.log.info(u"Send 'get status' message : {0}".format(get_status_message))
             self.rfxcom.write(binascii.unhexlify(get_status_message))
 
             # Wait for the status response
-            self.log.info("Wait for the status message...")
+            self.log.info(u"Wait for the status message...")
             # Here is a example of a status response :
             # length : 13
             # data (including length) : 0d010001025315004f6f00000000
             status_msg = self.wait_for(self.stop, 13, "01")
-            self.log.info("Status message received : {0}".format(status_msg))
+            self.log.info(u"Status message received : {0}".format(status_msg))
             # decode and display informations about the status
             self.decode_status(status_msg)
           
@@ -206,7 +206,7 @@ class Rfxcom:
             # one option per protocol (handle only the protocols supported by the plugin and set 0 for others)
 
             # Init process finished
-            self.log.info("RFXCOM is ready to use! Have fun")
+            self.log.info(u"RFXCOM is ready to use! Have fun")
         
         except:
             error = "Error while opening RFXCOM : %s. Check if it is the good device or if you have the good permissions on it. Error : %s" % (self.rfxcom_device, traceback.format_exc())
@@ -216,7 +216,7 @@ class Rfxcom:
     def close(self):
         """ close RFXCOM
         """
-        self.log.info("Close RFXCOM")
+        self.log.info(u"Close RFXCOM")
         try:
             self.rfxcom.close()
         except:
@@ -276,7 +276,7 @@ class Rfxcom:
             Transmit message 3
             Receive ACK 3
         """
-        self.log.info("Start the write_rfx thread")
+        self.log.info(u"Start the write_rfx thread")
         # To test, see RFXCOM email from 17/10/2011 at 20:22 
         
         # infinite
@@ -291,7 +291,7 @@ class Rfxcom:
             seqnbr = data["seqnbr"]
             packet = data["packet"]
             xpl_trig_message = data["xpl_trig_message"]
-            self.log.debug("Get from Queue : %s > %s" % (seqnbr, packet))
+            self.log.debug(u"Get from Queue : %s > %s" % (seqnbr, packet))
             self.rfxcom.write(binascii.unhexlify(packet))
 
             # TODO : improve to be sure the response is related to the written message (with seqnmbr)
@@ -300,11 +300,11 @@ class Rfxcom:
             while loop == True:
                 res = self.rfx_response.get(block = True)
                 if res["status"] == "NACK":
-                    self.debug.warning("Failed to write. Retry in %s : %s > %s" % (WAIT_BETWEEN_TRIES, seqnbr, packet))
+                    self.log.warning(u"Failed to write. Retry in %s : %s > %s" % (WAIT_BETWEEN_TRIES, seqnbr, packet))
                     time.sleep(WAIT_BETWEEN_TRIES)
                     self.rfxcom.write(binascii.unhexlify(packet))
                 else:
-                    self.log.debug("Command succesfully sent")
+                    self.log.debug(u"Command succesfully sent")
                     self.cb_send_xpl(xpl_trig_message)
                     loop = False
             
@@ -327,33 +327,33 @@ class Rfxcom:
         @param msg_type : type of the waited message
         @param timeout : timeout : if reached, we raise an error
         """
-        self.log.info("Start listening to the rfxcom device for lenght={0}, type={1}".format(length, msg_type))
+        self.log.info(u"Start listening to the rfxcom device for lenght={0}, type={1}".format(length, msg_type))
         try:
             # TODO : handle timeout
             while not stop.isSet():
 
-                self.log.debug("Waiting for a packet from the rfxcom with a length of {0} and hoping type will be {1}...".format(length, msg_type))
+                self.log.debug(u"Waiting for a packet from the rfxcom with a length of {0} and hoping type will be {1}...".format(length, msg_type))
                 data_len = self.rfxcom.read()
                 # handle empty data (why the hell does this happen ?)
                 if data_len == '':
-                    #self.log.debug("Timeout reached (this is not an issue!!)")
+                    #self.log.debug(u"Timeout reached (this is not an issue!!)")
                     continue
 
                 hex_data_len = binascii.hexlify(data_len)
                 int_data_len = int(hex_data_len, 16)
                     
-                self.log.debug("Packet of length {0} (0x{1}) received, start processing...".format(int_data_len, hex_data_len))
+                self.log.debug(u"Packet of length {0} (0x{1}) received, start processing...".format(int_data_len, hex_data_len))
                 if int_data_len == length:
                     # We read data
                     data = self.rfxcom.read(int_data_len)
                     hex_data = binascii.hexlify(data)
-                    self.log.debug("Packet : %s" % hex_data)
+                    self.log.debug(u"Packet : %s" % hex_data)
                     the_type = hex_data[0] + hex_data[1]
                     if msg_type == the_type:
-                        self.log.debug("Packet type is the one we wait for. End waiting for a dedicated packet")
+                        self.log.debug(u"Packet type is the one we wait for. End waiting for a dedicated packet")
                         return hex_data
                     else:
-                        self.log.debug("Packet type (0x{0})is the one we are waiting for (0x{1}) : skipping this one.".format(the_type, msg_type))
+                        self.log.debug(u"Packet type (0x{0})is the one we are waiting for (0x{1}) : skipping this one.".format(the_type, msg_type))
                     
                 else:
                     # bad length : skip message
@@ -361,11 +361,11 @@ class Rfxcom:
                     # some data of the given length
 
                     # TODO : how to handle this ?????
-                    self.log.debug("This is not the message we are waiting for")
+                    self.log.debug(u"This is not the message we are waiting for")
 
         except serial.SerialException:
             error = "Error while reading rfxcom device (disconnected ?) : %s" % traceback.format_exc()
-            self.log.error(error)
+            self.log.error(u"{0}".format(error))
             # TODO : raise for using self.force_leave() in bin ?
             return
 
@@ -375,15 +375,15 @@ class Rfxcom:
         """ Start listening to Rfxcom
         @param stop : an Event to wait for stop request
         """
-        self.log.info("**** Start really using RFXCOM ****")
-        self.log.info("Start listening to the rfxcom device")
+        self.log.info(u"**** Start really using RFXCOM ****")
+        self.log.info(u"Start listening to the rfxcom device")
         # infinite
         try:
             while not stop.isSet():
                 self.read()
         except serial.SerialException:
             error = "Error while reading rfxcom device (disconnected ?) : %s" % traceback.format_exc()
-            self.log.error(error)
+            self.log.error(u"{0}".format(error))
             # TODO : raise for using self.force_leave() in bin ?
             return
 
@@ -393,7 +393,7 @@ class Rfxcom:
             Then, read message
         """
         # We wait for a message (and its size)
-        #self.log.debug("**** Waiting for a packet from the RFXCOM ****")
+        #self.log.debug(u"**** Waiting for a packet from the RFXCOM ****")
         data_len = self.rfxcom.read()
 
         # if timeout is reached for reading, don't process the rest of the function
@@ -401,15 +401,15 @@ class Rfxcom:
         if data_len == "":
             return
 
-        self.log.debug("**** New packet received ****")
+        self.log.debug(u"**** New packet received ****")
         hex_data_len = binascii.hexlify(data_len)
         int_data_len = int(hex_data_len, 16)
-        self.log.debug("Packet length = %s" % int_data_len)
+        self.log.debug(u"Packet length = %s" % int_data_len)
         # the max length of a valid message is for :
         # 0x03: Undecoded RF Message
         # it is 36
         if int_data_len > 37:
-            self.log.error("It seems that bad data has been received! Length = {0}".format(int_data_len))
+            self.log.error(u"It seems that bad data has been received! Length = {0}".format(int_data_len))
             # we skip the next steps in order no to block the plugin
             # but as we skip and don't know what is behind, the next byte will be read as a length and so, some
             # bad data may be processed as valid data and some errors may occurs
@@ -419,7 +419,7 @@ class Rfxcom:
             # We read data
             data = self.rfxcom.read(int_data_len)
             hex_data = binascii.hexlify(data)
-            self.log.debug("Packet data = %s" % hex_data)
+            self.log.debug(u"Packet data = %s" % hex_data)
 
             # Process data
             self._process_received_data(hex_data)
@@ -430,7 +430,7 @@ class Rfxcom:
             @param data : data read
         """
         type = data[0] + data[1]
-        self.log.debug("Packet type = %s" % type)
+        self.log.debug(u"Packet type = %s" % type)
         try:
             eval("self._process_%s('%s')" % (type, data))
         except AttributeError:
@@ -438,8 +438,7 @@ class Rfxcom:
             self.log.warning(warning)
         except:
             error = "Error while processing type %s : %s" % (type, traceback.format_exc())
-            self.log.error(error)
-
+            self.log.error(u"{0}".format(error))
 
     def decode_status(self, data):
         """ Decode the status message and disply informations about it in the logs
@@ -459,39 +458,39 @@ class Rfxcom:
         msg9 = gh(data, 12)
 
         # receiver/transceiver type
-        self.log.info("- Receiver/transceiver type : {0} - {1}".format(msg1, RECEIVER_TRANSCEIVER[msg1]))
+        self.log.info(u"- Receiver/transceiver type : {0} - {1}".format(msg1, RECEIVER_TRANSCEIVER[msg1]))
         # firmware version
-        self.log.info("- Firmware version : 0x{0} - {1}".format(msg2, int(msg2, 16)))
+        self.log.info(u"- Firmware version : 0x{0} - {1}".format(msg2, int(msg2, 16)))
         # enabled protocoles
-        self.log.debug("- Protocol (raw) > msg3 : {0}".format(msg3))
-        self.log.info("- Protocol > Enable display of undecoded : {0}".format(get_bit(msg3, 7)))
-        self.log.info("- Protocol > RFU6                        : {0}".format(get_bit(msg3, 6)))
-        self.log.info("- Protocol > RFU5                        : {0}".format(get_bit(msg3, 5)))
-        self.log.info("- Protocol > RSL                         : {0}".format(get_bit(msg3, 4)))
-        self.log.info("- Protocol > Lighting4                   : {0}".format(get_bit(msg3, 3)))
-        self.log.info("- Protocol > FineOffset/Viking           : {0}".format(get_bit(msg3, 2)))
-        self.log.info("- Protocol > Rubicson                    : {0}".format(get_bit(msg3, 1)))
-        self.log.info("- Protocol > AE Blyss                    : {0}".format(get_bit(msg3, 0)))
+        self.log.debug(u"- Protocol (raw) > msg3 : {0}".format(msg3))
+        self.log.info(u"- Protocol > Enable display of undecoded : {0}".format(get_bit(msg3, 7)))
+        self.log.info(u"- Protocol > RFU6                        : {0}".format(get_bit(msg3, 6)))
+        self.log.info(u"- Protocol > RFU5                        : {0}".format(get_bit(msg3, 5)))
+        self.log.info(u"- Protocol > RSL                         : {0}".format(get_bit(msg3, 4)))
+        self.log.info(u"- Protocol > Lighting4                   : {0}".format(get_bit(msg3, 3)))
+        self.log.info(u"- Protocol > FineOffset/Viking           : {0}".format(get_bit(msg3, 2)))
+        self.log.info(u"- Protocol > Rubicson                    : {0}".format(get_bit(msg3, 1)))
+        self.log.info(u"- Protocol > AE Blyss                    : {0}".format(get_bit(msg3, 0)))
 
-        self.log.debug("- Protocol (raw) > msg4 : {0}".format(msg4))
-        self.log.info("- Protocol > BlindsT1                    : {0}".format(get_bit(msg4, 7)))
-        self.log.info("- Protocol > BlindsT0                    : {0}".format(get_bit(msg4, 6)))
-        self.log.info("- Protocol > ProGuard                    : {0}".format(get_bit(msg4, 5)))
-        self.log.info("- Protocol > FS20                        : {0}".format(get_bit(msg4, 4)))
-        self.log.info("- Protocol > La Crosse                   : {0}".format(get_bit(msg4, 3)))
-        self.log.info("- Protocol > Hideki/UPM                  : {0}".format(get_bit(msg4, 2)))
-        self.log.info("- Protocol > AD LightwaveRF              : {0}".format(get_bit(msg4, 1)))
-        self.log.info("- Protocol > Mertik                      : {0}".format(get_bit(msg4, 0)))
+        self.log.debug(u"- Protocol (raw) > msg4 : {0}".format(msg4))
+        self.log.info(u"- Protocol > BlindsT1                    : {0}".format(get_bit(msg4, 7)))
+        self.log.info(u"- Protocol > BlindsT0                    : {0}".format(get_bit(msg4, 6)))
+        self.log.info(u"- Protocol > ProGuard                    : {0}".format(get_bit(msg4, 5)))
+        self.log.info(u"- Protocol > FS20                        : {0}".format(get_bit(msg4, 4)))
+        self.log.info(u"- Protocol > La Crosse                   : {0}".format(get_bit(msg4, 3)))
+        self.log.info(u"- Protocol > Hideki/UPM                  : {0}".format(get_bit(msg4, 2)))
+        self.log.info(u"- Protocol > AD LightwaveRF              : {0}".format(get_bit(msg4, 1)))
+        self.log.info(u"- Protocol > Mertik                      : {0}".format(get_bit(msg4, 0)))
 
-        self.log.debug("- Protocol (raw) > msg5 : {0}".format(msg5))
-        self.log.info("- Protocol > Visonic                     : {0}".format(get_bit(msg5, 7)))
-        self.log.info("- Protocol > ATI                         : {0}".format(get_bit(msg5, 6)))
-        self.log.info("- Protocol > Oregon Scientific           : {0}".format(get_bit(msg5, 5)))
-        self.log.info("- Protocol > Meiantech                   : {0}".format(get_bit(msg5, 4)))
-        self.log.info("- Protocol > HomeEasy EU                 : {0}".format(get_bit(msg5, 3)))
-        self.log.info("- Protocol > AC                          : {0}".format(get_bit(msg5, 2)))
-        self.log.info("- Protocol > ARC                         : {0}".format(get_bit(msg5, 1)))
-        self.log.info("- Protocol > X10                         : {0}".format(get_bit(msg5, 0)))
+        self.log.debug(u"- Protocol (raw) > msg5 : {0}".format(msg5))
+        self.log.info(u"- Protocol > Visonic                     : {0}".format(get_bit(msg5, 7)))
+        self.log.info(u"- Protocol > ATI                         : {0}".format(get_bit(msg5, 6)))
+        self.log.info(u"- Protocol > Oregon Scientific           : {0}".format(get_bit(msg5, 5)))
+        self.log.info(u"- Protocol > Meiantech                   : {0}".format(get_bit(msg5, 4)))
+        self.log.info(u"- Protocol > HomeEasy EU                 : {0}".format(get_bit(msg5, 3)))
+        self.log.info(u"- Protocol > AC                          : {0}".format(get_bit(msg5, 2)))
+        self.log.info(u"- Protocol > ARC                         : {0}".format(get_bit(msg5, 1)))
+        self.log.info(u"- Protocol > X10                         : {0}".format(get_bit(msg5, 0)))
 
 
 
@@ -515,29 +514,29 @@ class Rfxcom:
             elif msg == "01":
                 ack = True
                 msg_desc = "ACK, but transmit started after 3 seconds delay anyway with RF receive data"
-                self.log.warning("Response from RFXCOM : ACK, but transmit started after 3 seconds delay anyway with RF receive data")
+                self.log.warning(u"Response from RFXCOM : ACK, but transmit started after 3 seconds delay anyway with RF receive data")
             elif msg == "02":
                 ack = False
                 msg_desc = "NAK, transmitter did not lock on the requested transmit frequency"
-                self.log.error("Response from RFXCOM : NAK, transmitter did not lock on the requested transmit frequency")
+                self.log.error(u"Response from RFXCOM : NAK, transmitter did not lock on the requested transmit frequency")
             elif msg == "03":
                 ack = False
                 msg_desc = "NAK, AC address zero in id1-id4 not allowed"
-                self.log.error("Response from RFXCOM : NAK, AC address zero in id1-id4 not allowed")
+                self.log.error(u"Response from RFXCOM : NAK, AC address zero in id1-id4 not allowed")
             else:
                 ack = False
                 msg_desc = "unknown message !!!"
-                self.log.error("Bad message received from RFXCOM : {0}".format(data))
+                self.log.error(u"Bad message received from RFXCOM : {0}".format(data))
         else:
             ack = False
             subtype_desc = "unknown subtype !!!"
-            self.log.error("Bad message received from RFXCOM : {0}".format(data))
+            self.log.error(u"Bad message received from RFXCOM : {0}".format(data))
 
         # debug informations
-        self.log.debug("Packet informations :")
-        self.log.debug("- type 02 : Responses or messages send by the receiver or transmitter")
-        self.log.debug("- subtype = {0}. {1}".format(subtype, subtype_desc))
-        self.log.debug("- message = {0}. {1}".format(msg, msg_desc))
+        self.log.debug(u"Packet informations :")
+        self.log.debug(u"- type 02 : Responses or messages send by the receiver or transmitter")
+        self.log.debug(u"- subtype = {0}. {1}".format(subtype, subtype_desc))
+        self.log.debug(u"- message = {0}. {1}".format(msg, msg_desc))
 
         # if message successfully processed by the RFXCOM, write an 'ACK' to the response queue
         if ack:
@@ -592,11 +591,11 @@ class Rfxcom:
             # filler + rssi : 0x00
             cmd += "00"
     
-            self.log.debug("Type 11 - lighting2 : write {0}".format(cmd))
+            self.log.debug(u"Type 11 - lighting2 : write {0}".format(cmd))
             self.write_packet(cmd, trig_msg)
             return True
         except:
-            self.log.error("Error while processing command for type 11 : {0}".format(traceback.format_exc()))
+            self.log.error(u"Error while processing command for type 11 : {0}".format(traceback.format_exc()))
             return False
 
 
@@ -629,13 +628,13 @@ class Rfxcom:
         model = "{0}".format(TYPE_50_MODELS["0x{0}".format(subtype)])
 
         # debug informations
-        self.log.debug("Packet informations :")
-        self.log.debug("- type 50 : temperature sensor")
-        self.log.debug("- address = {0}".format(address))
-        self.log.debug("- model = {0}".format(model))
-        self.log.debug("- temperature = {0}".format(temp))
-        self.log.debug("- battery = {0}".format(battery))
-        self.log.debug("- rssi = {0}".format(rssi))
+        self.log.debug(u"Packet informations :")
+        self.log.debug(u"- type 50 : temperature sensor")
+        self.log.debug(u"- address = {0}".format(address))
+        self.log.debug(u"- model = {0}".format(model))
+        self.log.debug(u"- temperature = {0}".format(temp))
+        self.log.debug(u"- battery = {0}".format(battery))
+        self.log.debug(u"- rssi = {0}".format(rssi))
  
         # send xPL
         self.cb_send_xpl(schema = "sensor.basic",
@@ -691,15 +690,15 @@ class Rfxcom:
         model = "{0}".format(TYPE_52_MODELS["0x{0}".format(subtype)])
 
         # debug informations
-        self.log.debug("Packet informations :")
-        self.log.debug("- type 52 : temperature and humidity sensor")
-        self.log.debug("- address = {0}".format(address))
-        self.log.debug("- model = {0}".format(TYPE_52_MODELS["0x{0}".format(subtype)]))
-        self.log.debug("- temperature = {0}".format(temp))
-        self.log.debug("- humidity = {0}".format(humidity))
-        self.log.debug("- humidity status = {0}".format(humidity_status))
-        self.log.debug("- battery = {0}".format(battery))
-        self.log.debug("- rssi = {0}".format(rssi))
+        self.log.debug(u"Packet informations :")
+        self.log.debug(u"- type 52 : temperature and humidity sensor")
+        self.log.debug(u"- address = {0}".format(address))
+        self.log.debug(u"- model = {0}".format(TYPE_52_MODELS["0x{0}".format(subtype)]))
+        self.log.debug(u"- temperature = {0}".format(temp))
+        self.log.debug(u"- humidity = {0}".format(humidity))
+        self.log.debug(u"- humidity status = {0}".format(humidity_status))
+        self.log.debug(u"- battery = {0}".format(battery))
+        self.log.debug(u"- rssi = {0}".format(rssi))
 
         # send xPL
         self.cb_send_xpl(schema = "sensor.basic",
