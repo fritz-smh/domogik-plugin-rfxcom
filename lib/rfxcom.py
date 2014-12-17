@@ -669,8 +669,8 @@ class Rfxcom:
                         "rssi" : rssi})
 
         # handle device features detection
-        for feature in ['lighting2_switch']:
-            self.cb_device_detected(device_type = "rfxcom.lighting2_switch", 
+        for feature in ['switch_lighting2']:
+            self.cb_device_detected(device_type = "rfxcom.door_window_lignthing_2", 
                                     type = "xpl_stats",
                                     feature = feature,
                                     data = {"address" : address,

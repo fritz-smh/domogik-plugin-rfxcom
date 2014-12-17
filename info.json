@@ -330,6 +330,20 @@
                 "round_value": 0
             }
         },
+        "rssi_lighting2": {
+            "name": "Signal strength",
+            "incremental" : false,
+            "data_type": "DT_Number",
+            "conversion": "",
+            "timeout" : 600,
+            "history": {
+                "store": true,
+                "duplicate" : false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        },
         "temperature": {
             "name": "Temperature",
             "incremental" : false,
@@ -398,7 +412,7 @@
                     {
                         "key": "rssi",
                         "ignore_values": "",
-                        "sensor": "rssi"
+                        "sensor": "rssi_lighting2"
                     },
                     {
                         "key": "command",
@@ -490,6 +504,48 @@
        }
     },
     "device_types": {
+        "rfxcom.switch_lighting_2": {
+            "description": "", 
+            "id": "rfxcom.switch_lighting_2", 
+            "name": "Lighting : Chacon, DIO, AC, HomeEasy EU, ANSLUT",
+            "commands": ["switch_lighting2"],
+            "sensors": ["switch_lighting2", "rssi_lighting2"],
+            "parameters": [
+                {
+                    "key": "address",
+                    "xpl" : true,
+                    "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
+                    "type": "string"
+                },
+                {
+                    "key": "unit",
+                    "xpl" : true,
+                    "description": "Device unit (1..16). Example: 3",
+                    "type": "integer"
+                }
+            ]
+        },
+        "rfxcom.door_window_lighting_2": {
+            "description": "", 
+            "id": "rfxcom.door_window_lighting_2", 
+            "name": "Door/window sensor : Chacon, ...",
+            "commands": [],
+            "sensors": ["switch_lighting2", "rssi_lighting2"],
+            "parameters": [
+                {
+                    "key": "address",
+                    "xpl" : true,
+                    "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
+                    "type": "string"
+                },
+                {
+                    "key": "unit",
+                    "xpl" : true,
+                    "description": "Device unit (1..16). Example: 3",
+                    "type": "integer"
+                }
+            ]
+        },
         "rfxcom.temperature": {
             "description": "", 
             "id": "rfxcom.temperature", 
@@ -517,48 +573,6 @@
                     "xpl" : true,
                     "description": "Device address. Example: th9 0xFFFF",
                     "type": "string"
-                }
-            ]
-        },
-        "rfxcom.switch_lighting_2": {
-            "description": "", 
-            "id": "rfxcom.switch_lighting_2", 
-            "name": "Lighting : Chacon, DIO, AC, HomeEasy EU, ANSLUT",
-            "commands": ["switch_lighting2"],
-            "sensors": ["switch_lighting2", "rssi"],
-            "parameters": [
-                {
-                    "key": "address",
-                    "xpl" : true,
-                    "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
-                    "type": "string"
-                },
-                {
-                    "key": "unit",
-                    "xpl" : true,
-                    "description": "Device unit (1..16). Example: 3",
-                    "type": "integer"
-                }
-            ]
-        },
-        "rfxcom.door_window_lighting_2": {
-            "description": "", 
-            "id": "rfxcom.door_window_lighting_2", 
-            "name": "Door/window sensor : Chacon, ...",
-            "commands": [],
-            "sensors": ["switch_lighting2", "rssi"],
-            "parameters": [
-                {
-                    "key": "address",
-                    "xpl" : true,
-                    "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
-                    "type": "string"
-                },
-                {
-                    "key": "unit",
-                    "xpl" : true,
-                    "description": "Device unit (1..16). Example: 3",
-                    "type": "integer"
                 }
             ]
         }
