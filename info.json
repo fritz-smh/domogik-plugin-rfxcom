@@ -414,7 +414,7 @@
     },
     "xpl_stats": {
        "switch_lighting2": {
-            "name": "Switch",
+            "name": "switch_lighting2",
             "schema": "ac.basic",
             "parameters": {
                 "static": [],
@@ -422,12 +422,14 @@
                     {
                         "key": "address",
                         "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
-                        "type": "string"
+                        "type": "string",
+                        "multiple": "|"
                     },
                     {
                         "key": "unit",
                         "description": "Device unit (1..16). Example: 3",
-                        "type": "integer"
+                        "type": "integer",
+                        "multiple": "|"
                     }
                 ],
                 "dynamic": [
