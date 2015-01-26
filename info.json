@@ -581,7 +581,12 @@
         "author": "Fritz", 
         "author_email": "fritz.smh at gmail.com", 
         "tags": ["rfxcom", "temperature", "humidity", "oregon", "lacrosse", "lighting", "chacon", "dio"], 
-        "dependencies": [], 
+        "dependencies": [
+            {   
+                "id": "pyserial (>=2.5)",
+                "type": "python"
+            }
+        ],
         "description": "Rfxcom plugin for usb Rfxcom model", 
         "domogik_min_version": "0.4.0", 
         "name": "rfxcom", 
