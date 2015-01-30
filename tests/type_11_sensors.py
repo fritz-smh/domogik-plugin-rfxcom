@@ -136,7 +136,10 @@ if __name__ == "__main__":
             # global params
             pass # there are no global params for this plugin
             # xpl params
-            for the_param in params['xpl']:
+            # usually we configure the xpl parameters. In this device case, we can have multiple addresses
+            # so the parameters are configured on xpl_stats level
+            #for the_param in params['xpl']:
+            for the_param in params['xpl_stats']['switch_lighting2']:
                 if the_param['key'] == "address":
                     the_param['value'] = dev
                 if the_param['key'] == "unit":
