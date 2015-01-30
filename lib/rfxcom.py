@@ -640,8 +640,8 @@ class Rfxcom:
 
         # barrery, rssi
         # no battery : only a filler
-        #battery = int(gh(data, 7)[0], 16) * 10  # percent
-        rssi = int(gh(data, 7)[1], 16) * 100/16 # percent
+        rssi = int(gh(data, 10)[0], 16) * 100/16 # percent
+        #battery = int(gh(data, 10)[1], 16) * 10  # percent
 
         # debug informations
         self.log.debug(u"Packet informations :")
