@@ -306,7 +306,7 @@
     },
     "xpl_commands": {
         "switch_lighting2" : {
-            "name": "switch_lighting2",
+            "name": "Switch",
             "schema": "ac.basic",
             "xplstat_name": "switch_lighting2",
             "parameters": {
