@@ -414,7 +414,7 @@
     },
     "xpl_stats": {
        "switch_lighting2": {
-            "name": "switch_lighting2",
+            "name": "switch_lighting2xxxx",
             "schema": "ac.basic",
             "parameters": {
                 "static": [],
@@ -542,20 +542,7 @@
             "name": "Door/window sensor : Chacon, ...",
             "commands": [],
             "sensors": ["switch_lighting2", "rssi_lighting2"],
-            "parameters": [
-                {
-                    "key": "address",
-                    "xpl" : true,
-                    "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
-                    "type": "string"
-                },
-                {
-                    "key": "unit",
-                    "xpl" : true,
-                    "description": "Device unit (1..16). Example: 3",
-                    "type": "integer"
-                }
-            ]
+            "parameters": []
         },
         "rfxcom.temperature": {
             "description": "", 
