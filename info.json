@@ -414,7 +414,7 @@
     },
     "xpl_stats": {
        "switch_lighting2": {
-            "name": "switch_lighting2xxxx",
+            "name": "Switch",
             "schema": "ac.basic",
             "parameters": {
                 "static": [],

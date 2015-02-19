@@ -30,7 +30,7 @@ class RfxcomTestCase(PluginTestCase):
                      'address' : "0x00109b52",
                      'unit' : 11,
                      'command' : 'off',
-                     'rssi' : 68
+                     'rssi' : 50
                   }]
 
         for test in tests:
