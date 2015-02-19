@@ -144,7 +144,7 @@ class RfxcomManager(XplPlugin):
         trig_msg = message
         trig_msg.set_type("xpl-trig")
         trig_msg.set_target("*")
-        trig_msg.set_source(self.source)
+        trig_msg.set_source(message.source)
         # Use the rfxcom
         if self.rfxcom_manager.command_11(address, unit, command, level, eu, group, trig_msg):
             self.myxpl.send(trig_msg)
