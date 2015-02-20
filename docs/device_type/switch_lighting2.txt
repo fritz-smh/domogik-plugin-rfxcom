@@ -64,8 +64,8 @@ Chacon 54561, 54565, 54566, 54567, 54581, 54582, 54585, 54585
 .. todo::
     picture
 
-Delete learned addresses
-************************
+Delete the learned addresses
+****************************
 
 * Plug the module. Press the button until the led blinks (about 6 seconds). 
 * Press the button one more time. 
