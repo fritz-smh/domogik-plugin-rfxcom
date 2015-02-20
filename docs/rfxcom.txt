@@ -60,6 +60,9 @@ Create the devices
 If your device is already listed in the products list, select it. Some fields will be automatically prefilled.
 
 * :doc:`Temperature and humidity devices <device_type/temperature_humidity>` (type 52)
+* :doc:`Lighting devices: Chacon, DIO, AC, HomeEasy EU, ANSLUT <device_type/switch_lighting2>` (type 11)
+* :doc:`TODO : Door/window sensor: Chacon, ... <device_type/door_window_lighting2>` (type 11)
+* :doc:`TODO : Dimmer ... <device_type/door_window_lighting2>` (type 11)
 
 How to get a device address ?
 =============================

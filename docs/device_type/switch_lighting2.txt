@@ -1,0 +1,81 @@
+========================================
+Switch devices : AC, HomeEasy EU, ANSLUT
+========================================
+
+Overview
+========
+
+These devices are able to switch on and off some appliances. There are many models in various brands.
+
+.. todo::
+
+    more informations about all models
+
+.. image:: switch_lighting2_chacon_ch54534.jpg
+
+Features
+========
+
+These devices are not dimmer devices. They have only one feature : 
+
+* switch
+
+Configuration
+=============
+
+When you create such a device, you will have to set this parameter:
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+address               string                      The device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe
+--------------------- --------------------------- ----------------------------------------------------------------------
+unit                  integer                     The device unit (1..16). Example: 3
+===================== =========================== ======================================================================
+
+Configure the hardware device
+=============================
+
+You can set up the *address* and *unit* values for this kind of hardware devices. Here are the instructions for several models.
+
+DI.O PDR-2300
+-------------
+
+.. todo::
+    picture
+
+Delete the learned addresses
+****************************
+
+* Plug the module.
+* Call this command before the led stop blinking : ./send.py xpl-cmnd ac.basic "address=0x1,unit=1,command=group_off"
+* The plugged light should blink twice for acknowlegment.
+
+Learn a new address
+*******************
+
+* Plug the module.
+* Call this command before the led stop blinking : ./send.py xpl-cmnd ac.basic "address=0x111,unit=1,command=on"
+* The plugged light should blink twice for acknowlegment.
+
+Chacon 54561, 54565, 54566, 54567, 54581, 54582, 54585, 54585
+-------------------------------------------------------------
+
+.. todo::
+    picture
+
+Delete learned addresses
+************************
+
+* Plug the module. Press the button until the led blinks (about 6 seconds). 
+* Press the button one more time. 
+* The plugged light should blink twice for acknowlegment.
+
+Learn a new address
+*******************
+
+* Plug the module. 
+* Press the button. 
+* Call this command before the led stop blinking : ./send.py xpl-cmnd ac.basic "address=0x111,unit=1,command=on" 
+* The plugged light should blink twice for acknowlegment.
+
