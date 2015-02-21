@@ -20,3 +20,14 @@ type 52 - temperature and humidity sensors
 
 The timeout is set to 10 minutes. Most of the sensors send data each minute, but it may happen that some data are lost from time to time, so we choose to set the timeout to 10 minutes to allow several errors.
 
+
+How to disable processing on some messages during development ?
+===============================================================
+
+In the file **lib/rfxcom.py**, you can edit the following list : ::
+
+    RESTRICT_TO_TYPE = [11]
+
+This will for example, restrict all messages processed to type 11 (and also system types) and will avoid too much spam in the logs due to other sensors.
+
+Don't forget to empty it after your upgrades!
