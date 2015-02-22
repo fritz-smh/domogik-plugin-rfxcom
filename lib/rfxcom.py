@@ -438,7 +438,7 @@ class Rfxcom:
         type = data[0] + data[1]
         self.log.debug(u"Packet type = %s" % type)
         try:
-            if int(type) != 02 and int(type) not in RESTRICT_TO_TYPE:
+            if RESTRICT_TO_TYPE != [] and int(type) != 02 and int(type) not in RESTRICT_TO_TYPE:
                 self.log.warning("Message skipped due to development restrictions (see RESTRICT_TO_TYPE variable content)")
             else:
                 eval("self._process_%s('%s')" % (type, data))
