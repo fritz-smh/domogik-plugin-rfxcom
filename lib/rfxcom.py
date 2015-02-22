@@ -35,6 +35,12 @@ Implements
 @organization: Domogik
 """
 
+# fill this variable only for development purpose!
+# it helps to process only some messages and so avoid spam from other sensors type
+# example : RESTRICT_TO_TYPE = [11] 
+# this will allow only type=11 messages to be processed
+RESTRICT_TO_TYPE = []
+
 import binascii
 import traceback
 import threading
@@ -432,7 +438,10 @@ class Rfxcom:
         type = data[0] + data[1]
         self.log.debug(u"Packet type = %s" % type)
         try:
-            eval("self._process_%s('%s')" % (type, data))
+            if RESTRICT_TO_TYPE != [] and int(type) != 02 and int(type) not in RESTRICT_TO_TYPE:
+                self.log.warning("Message skipped due to development restrictions (see RESTRICT_TO_TYPE variable content)")
+            else:
+                eval("self._process_%s('%s')" % (type, data))
         except AttributeError:
             warning = "No function for type '%s' with data : '%s'. It may be not yet implemented in the plugin. Full trace : %s" % (type, data, traceback.format_exc())
             self.log.warning(warning)

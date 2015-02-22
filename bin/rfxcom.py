@@ -141,10 +141,12 @@ class RfxcomManager(XplPlugin):
         else:
             eu = False
         # Prepare xpl-trig to send if success
-        trig_msg = message
+        trig_msg = XplMessage()
         trig_msg.set_type("xpl-trig")
-        trig_msg.set_target("*")
-        trig_msg.set_source(message.source)
+        trig_msg.set_schema("ac.basic")
+        for key in message.data:
+            trig_msg.add_data({key : message.data[key]})
+
         # Use the rfxcom
         if self.rfxcom_manager.command_11(address, unit, command, level, eu, group, trig_msg):
             self.myxpl.send(trig_msg)
