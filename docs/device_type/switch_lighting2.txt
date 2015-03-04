@@ -7,6 +7,8 @@ Overview
 
 These devices are able to switch on and off some appliances. There are many models in various brands.
 
+These devices can have several addresses set.
+
 .. todo::
 
     more informations about all models
@@ -49,6 +51,7 @@ unit                  integer                     The device unit (1..16). Examp
 ===================== =========================== ======================================================================
 
 For both address and unit, you can use multiple values. This can be needed if you are controlling the light with several commands : 
+
 * a switch
 * a remote control
 * an open/close sensor
@@ -75,8 +78,13 @@ DI.O PDR-2300
 Delete the learned addresses
 ****************************
 
+Be careful, this will delete **all** the addresses learned by the hardware device!
+
 * Plug the module.
-* Call this command before the led stop blinking : ./send.py xpl-cmnd ac.basic "address=0x1,unit=1,command=group_off"
+* Call this command before the led stop blinking (there is currently no way to do this from Domogik administration):  ::
+
+    dmg_send xpl-cmnd ac.basic "address=0x1,unit=1,command=group_off"
+
 * The plugged light should blink twice for acknowlegment.
 
 Learn a new address
