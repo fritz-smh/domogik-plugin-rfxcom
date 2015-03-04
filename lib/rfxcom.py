@@ -617,7 +617,7 @@ class Rfxcom:
 
 
     def _process_11(self, data):
-        """ Type 0x11, Lighting2
+        """ Type 0x11, Lighting2 (doors and windows open/close sensors, remotes, ...)
             Last update : 1.68 
         """
         AC_CMND = {
