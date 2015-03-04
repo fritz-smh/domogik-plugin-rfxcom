@@ -30,4 +30,4 @@ Key                   Type                        Description
 address               string                      The device address. Example: temp1 0xFFFF
 ===================== =========================== ======================================================================
 
-
+You can find the value of *address* for your device in the list of the *detected devices* in Domogik administration.

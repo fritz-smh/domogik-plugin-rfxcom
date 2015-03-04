@@ -9,7 +9,8 @@ Table Of Content
     /rfxcom
     /device_type/temperature_humidity
     /device_type/temperature
-    /device_type/switch_lighting2.txt
+    /device_type/switch_lighting2
+    /device_type/door_window_lighting2
     /dev
     /tests
     /changelog
