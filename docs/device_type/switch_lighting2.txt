@@ -56,6 +56,7 @@ For both address and unit, you can use multiple values. This can be needed if yo
 If you don't set all the possible addreses, the device sensor status may not be updated on Domogik side!
 
 Here is an example for the **0x0011223344 : 10** and **0x0044332211 : 8** :
+
 * address = 0x0011223344|0x0044332211
 * unit = 10|8
 
