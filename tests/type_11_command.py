@@ -6,6 +6,7 @@ from domogik.tests.common.plugintestcase import PluginTestCase
 from domogik.tests.common.testplugin import TestPlugin
 from domogik.tests.common.testdevice import TestDevice
 from domogik.tests.common.testsensor import TestSensor
+from domogik.tests.common.testcommand import TestCommand
 from domogik.common.utils import get_sanitized_hostname
 from datetime import datetime
 import unittest
@@ -16,21 +17,27 @@ import traceback
 class RfxcomTestCase(PluginTestCase):
 
     def test_0100_type11_sensor(self):
-        """ check if all the xpl messages for a door/window open/close sensor are sent
+        """ check if after a command is requested over rest, we receive the xpl-trig message and status is sotred in database
             Example : 
-            Rfxcom trame : 11000600109B520B000080
+            Rfxcom trame : 0b1100010038abfe0a010000
             Sample xPL message :
-            xpl-trig : schema:ac.basic, data:{'rssi': 68, 'command': 'off', 'unit': 11, 'address': '0x00109b52'}
+            xpl-trig : schema:ac.basic, data:{'rssi': 68, 'command': 'off', 'unit': 10, 'address': '0x0038abfe'}
 
         """
         global devices
         global unit  
 
         tests = [ {
-                     'address' : "0x00109b52",
-                     'unit' : 11,
+                     'address' : "0x0038abfe",
+                     'unit' : 10,
                      'command' : 'off',
-                     'rssi' : 50
+                     'rest_command' : 0
+                  },
+                  {
+                     'address' : "0x0038abfe",
+                     'unit' : 10,
+                     'command' : 'on',
+                     'rest_command' : 1
                   }]
 
         for test in tests:
@@ -38,21 +45,26 @@ class RfxcomTestCase(PluginTestCase):
                               test['unit'], 
                               devices[test['address']], 
                               test['command'], 
-                              test['rssi'])
+                              test['rest_command'])
 
-    def test_feature(self, address, unit, device_id, command, rssi):
+    def test_feature(self, address, unit, device_id, command, rest_command):
         """ Do the tests 
             @param address : device address
             @param unit : device unit
             @param device_id : device id
             @param command
-            @param rssi
+            @param rest_command
         """
 
         # test 
         print(u"Device address = {0}".format(address))
         print(u"Device unit = {0}".format(unit))
         print(u"Device id = {0}".format(device_id))
+
+        print(u"Call REST to send an '{0}'  command".format(rest_command))
+        tc = TestCommand(device_id, "switch_lighting2")
+        # send command
+        tc.send_command(rest_command)
         print(u"Check that a message with command = 'off' is sent.")
         
         self.assertTrue(self.wait_for_xpl(xpltype = "xpl-trig",
@@ -60,18 +72,13 @@ class RfxcomTestCase(PluginTestCase):
                                           xplsource = "domogik-{0}.{1}".format(self.name, get_sanitized_hostname()),
                                           data = {"command" : command,
                                                   "address" : address,
-                                                  "unit" : unit,
-                                                  "rssi" : rssi},
+                                                  "unit" : unit},
                                           timeout = 60))
         print(u"Check that the value of the xPL message has been inserted in database")
         sensor = TestSensor(device_id, "switch_lighting2")
         print(sensor.get_last_value())
-        print("{0} VS {1}".format(sensor.get_last_value()[1], self.xpl_data.data['command']))
         from domogik_packages.plugin_rfxcom.conversion.from_off_on_to_DT_Switch import from_off_on_to_DT_Switch
-        print("{0} VS2 {1}".format(sensor.get_last_value()[1], from_off_on_to_DT_Switch(self.xpl_data.data['command'])))
-        print("{0} VS2 {1}".format(type(sensor.get_last_value()[1]), type(from_off_on_to_DT_Switch(self.xpl_data.data['command']))))
         # the data is converted to be inserted in database
-        #self.assertTrue(sensor.get_last_value()[1] == self.xpl_data.data['command'])
         self.assertTrue(int(sensor.get_last_value()[1]) == from_off_on_to_DT_Switch(self.xpl_data.data['command']))
 
 
@@ -83,10 +90,10 @@ if __name__ == "__main__":
 
     ### global variables
     # the key will be the device address
-    devices = { "0x00109b52" : 0
+    devices = { "0x0038abfe" : 0
               }
     # for this kind of devices (address is set in 2 params : address+unit) we assume that unit will be 11 for all tests
-    unit = 11
+    unit = 10
 
     ### configuration
 
@@ -107,7 +114,7 @@ if __name__ == "__main__":
             'device' : '/dev/rfxcom' }
     # specific configuration for test mdode (handled by the manager for plugin startup)
     cfg['test_mode'] = True 
-    cfg['test_option'] = "{0}/type_11_sensor_data.json".format(test_folder)
+    cfg['test_option'] = "{0}/type_11_command_data.json".format(test_folder)
    
 
     ### start tests
@@ -125,11 +132,11 @@ if __name__ == "__main__":
 
     # create a test device
     try:
-        params = td.get_params(client_id, "rfxcom.door_window_lighting_2")
+        params = td.get_params(client_id, "rfxcom.switch_lighting_2")
    
         for dev in devices:
             # fill in the params
-            params["device_type"] = "rfxcom.door_window_lighting_2"
+            params["device_type"] = "rfxcom.switch_lighting_2"
             params["name"] = "test_device_rfxcom_type11_{0}".format(dev)
             params["reference"] = "reference"
             params["description"] = "description"
@@ -143,7 +150,12 @@ if __name__ == "__main__":
                 if the_param['key'] == "address":
                     the_param['value'] = dev
                 if the_param['key'] == "unit":
-                    the_param['value'] = 11
+                    the_param['value'] = unit
+            for the_param in params['xpl_commands']['switch_lighting2']:
+                if the_param['key'] == "address":
+                    the_param['value'] = dev
+                if the_param['key'] == "unit":
+                    the_param['value'] = unit
             print params['xpl']
             # create
             device_id = td.create_device(params)['id']

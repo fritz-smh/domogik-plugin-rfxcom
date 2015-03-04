@@ -56,7 +56,7 @@ class RfxcomTestCase(PluginTestCase):
             @param rssi
         """
 
-        # test temperature
+        # test 
         print(u"Device address = {0}".format(address))
         print(u"Device unit = {0}".format(unit))
         print(u"Device id = {0}".format(device_id))
