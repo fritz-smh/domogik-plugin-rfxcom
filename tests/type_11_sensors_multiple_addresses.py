@@ -134,10 +134,10 @@ if __name__ == "__main__":
 
     # create a test device
     try:
-        params = td.get_params(client_id, "rfxcom.door_window_lighting_2")
+        params = td.get_params(client_id, "rfxcom.door_window_lighting2")
    
         # fill in the params
-        params["device_type"] = "rfxcom.door_window_lighting_2"
+        params["device_type"] = "rfxcom.door_window_lighting2"
         params["name"] = "test_device_rfxcom_type11_{0}".format(device)
         params["reference"] = "reference"
         params["description"] = "description"

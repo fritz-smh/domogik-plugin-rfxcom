@@ -528,17 +528,17 @@
        }
     },
     "device_types": {
-        "rfxcom.switch_lighting_2": {
+        "rfxcom.switch_lighting2": {
             "description": "", 
-            "id": "rfxcom.switch_lighting_2", 
+            "id": "rfxcom.switch_lighting2", 
             "name": "Lighting : Chacon, DIO, AC, HomeEasy EU, ANSLUT",
             "commands": ["switch_lighting2"],
             "sensors": ["switch_lighting2", "rssi_lighting2"],
             "parameters": []
         },
-        "rfxcom.door_window_lighting_2": {
+        "rfxcom.door_window_lighting2": {
             "description": "", 
-            "id": "rfxcom.door_window_lighting_2", 
+            "id": "rfxcom.door_window_lighting2", 
             "name": "Door/window sensor : Chacon, ...",
             "commands": [],
             "sensors": ["switch_lighting2", "rssi_lighting2"],
