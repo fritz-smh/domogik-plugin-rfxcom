@@ -679,12 +679,31 @@ class Rfxcom:
 
         # handle device features detection
         for feature in ['switch_lighting2']:
-            self.cb_device_detected(device_type = "rfxcom.door_window_lignthing_2", 
-                                    type = "xpl_stats",
-                                    feature = feature,
-                                    data = {"address" : address,
-                                            "unit" : unit_code,
-                                            "reference" : "{0} (lighting2)".format(subtype_desc)})
+            #self.cb_device_detected(device_type = "rfxcom.door_window_lignthing_2", 
+            #                        type = "xpl_stats",
+            #                        feature = feature,
+            #                        data = {"address" : address,
+            #                                "unit" : unit_code,
+            #                                "reference" : "{0} (lighting2)".format(subtype_desc)})
+            self.cb_device_detected({
+                "device_type" : "rfxcom.door_window_lignthing_2",
+                "reference" : "{0} (lighting2)".format(subtype_desc),
+                "global" : [],
+                "xpl" : [],
+                "xpl_commands" : {},
+                "xpl_stats" : {
+                    "switch_lighting2" : [
+                        {
+                            "key" : "address",
+                            "value" : address
+                        },
+                        {
+                            "key" : "unit",
+                            "value" : unit_code
+                        }
+                    ]
+                }
+            })
  
 
 
@@ -742,11 +761,25 @@ class Rfxcom:
 
         # handle device features detection
         for feature in ['temperature']:
-            self.cb_device_detected(device_type = "rfxcom.temperature", 
-                                    type = "xpl_stats",
-                                    feature = feature,
-                                    data = {"device" : address,
-                                            "reference" : model})
+            #self.cb_device_detected(device_type = "rfxcom.temperature", 
+            #                        type = "xpl_stats",
+            #                        feature = feature,
+            #                        data = {"device" : address,
+            #                                "reference" : model})
+            self.cb_device_detected({
+                "device_type" : "rfxcom.temperature",
+                "reference" : model,
+                "global" : [],
+                "xpl" : [
+                    {
+                        "key" : "address",
+                        "value" : address
+                    }
+                ],
+                "xpl_commands" : {},
+                "xpl_stats" : {}
+            })
+
         # TODO : and why not rssi, battery ?
 
     def _process_52(self, data):
@@ -816,11 +849,24 @@ class Rfxcom:
 
         # handle device features detection
         for feature in ['temperature', 'humidity']:
-            self.cb_device_detected(device_type = "rfxcom.temperature_humidity", 
-                                    type = "xpl_stats",
-                                    feature = feature,
-                                    data = {"device" : address,
-                                            "reference" : model})
+            #self.cb_device_detected(device_type = "rfxcom.temperature_humidity", 
+            #                        type = "xpl_stats",
+            #                        feature = feature,
+            #                        data = {"device" : address,
+            #                                "reference" : model})
+            self.cb_device_detected({
+                "device_type" : "rfxcom.temperature_humidity",
+                "reference" : model,
+                "global" : [],
+                "xpl" : [
+                    {
+                        "key" : "address",
+                        "value" : address
+                    }
+                ],
+                "xpl_commands" : {},
+                "xpl_stats" : {}
+            })
         # TODO : and why not rssi, battery ?
 
 
