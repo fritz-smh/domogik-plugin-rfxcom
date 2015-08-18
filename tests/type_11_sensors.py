@@ -66,10 +66,10 @@ class RfxcomTestCase(PluginTestCase):
         print(u"Check that the value of the xPL message has been inserted in database")
         sensor = TestSensor(device_id, "open_close_lighting2")
         print(sensor.get_last_value())
-        print("{0} VS {1}".format(sensor.get_last_value()[1], self.xpl_data.data['command']))
+        #print("{0} VS {1}".format(sensor.get_last_value()[1], self.xpl_data.data['command']))
         from domogik_packages.plugin_rfxcom.conversion.from_off_on_to_DT_OpenClose import from_off_on_to_DT_OpenClose
-        print("{0} VS2 {1}".format(sensor.get_last_value()[1], from_off_on_to_DT_Switch(self.xpl_data.data['command'])))
-        print("{0} VS2 {1}".format(type(sensor.get_last_value()[1]), type(from_off_on_to_DT_Switch(self.xpl_data.data['command']))))
+        #print("{0} VS2 {1}".format(sensor.get_last_value()[1], from_off_on_to_DT_OpenClose(self.xpl_data.data['command'])))
+        #print("{0} VS2 {1}".format(type(sensor.get_last_value()[1]), type(from_off_on_to_DT_OpenClose(self.xpl_data.data['command']))))
         # the data is converted to be inserted in database
         #self.assertTrue(sensor.get_last_value()[1] == self.xpl_data.data['command'])
         self.assertTrue(int(sensor.get_last_value()[1]) == from_off_on_to_DT_OpenClose(self.xpl_data.data['command']))
