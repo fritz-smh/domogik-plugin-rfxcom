@@ -64,7 +64,7 @@ class RfxcomTestCase(PluginTestCase):
                                                   "rssi" : rssi},
                                           timeout = 60))
         print(u"Check that the value of the xPL message has been inserted in database")
-        sensor = TestSensor(device_id, "open_close_lighting2")
+        sensor = TestSensor(device_id, "open_close")
         print(sensor.get_last_value())
         #print("{0} VS {1}".format(sensor.get_last_value()[1], self.xpl_data.data['command']))
         from domogik_packages.plugin_rfxcom.conversion.from_off_on_to_DT_OpenClose import from_off_on_to_DT_OpenClose
@@ -125,11 +125,11 @@ if __name__ == "__main__":
 
     # create a test device
     try:
-        params = td.get_params(client_id, "rfxcom.open_close_lighting2")
+        params = td.get_params(client_id, "rfxcom.open_close")
    
         for dev in devices:
             # fill in the params
-            params["device_type"] = "rfxcom.open_close_lighting2"
+            params["device_type"] = "rfxcom.open_close"
             params["name"] = "test_device_rfxcom_type11_{0}".format(dev)
             params["reference"] = "reference"
             params["description"] = "description"
@@ -139,7 +139,7 @@ if __name__ == "__main__":
             # usually we configure the xpl parameters. In this device case, we can have multiple addresses
             # so the parameters are configured on xpl_stats level
             #for the_param in params['xpl']:
-            for the_param in params['xpl_stats']['open_close_lighting2']:
+            for the_param in params['xpl_stats']['open_close']:
                 if the_param['key'] == "address":
                     the_param['value'] = dev
                 if the_param['key'] == "unit":

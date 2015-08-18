@@ -341,7 +341,7 @@
                 "round_value": 0
             }
         },
-        "open_close_lighting2": {
+        "open_close": {
             "name": "Open/Close sensor",
             "incremental" : false,
             "data_type": "DT_OpenClose",
@@ -460,7 +460,7 @@
                 ]
             }
        },
-       "open_close_lighting2": {
+       "open_close": {
             "name": "Open/Close sensor",
             "schema": "ac.basic",
             "parameters": {
@@ -486,7 +486,7 @@
                     {
                         "key": "command",
                         "ignore_values": "",
-                        "sensor": "open_close_lighting2"
+                        "sensor": "open_close"
                     }
                 ]
             }
@@ -581,12 +581,12 @@
             "sensors": ["switch_lighting2", "rssi_lighting2"],
             "parameters": []
         },
-        "rfxcom.open_close_lighting2": {
+        "rfxcom.open_close": {
             "description": "", 
-            "id": "rfxcom.open_close_lighting2", 
+            "id": "rfxcom.open_close", 
             "name": "Door/window close/open sensor : Chacon, ...",
             "commands": [],
-            "sensors": ["open_close_lighting2", "rssi_lighting2"],
+            "sensors": ["open_close", "rssi_lighting2"],
             "parameters": []
         },
         "rfxcom.temperature": {
