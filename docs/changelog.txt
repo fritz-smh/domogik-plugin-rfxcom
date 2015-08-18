@@ -10,7 +10,7 @@ Changelog
   * Switches
   * Open/close windows and doors sensors
 
-* Upgrade devices detection to be Domogik 0.4.0b2 compliant.
+* Upgrade devices detection to be Domogik 0.4.1 compliant.
 
 1.68.1
 ======

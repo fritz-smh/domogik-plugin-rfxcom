@@ -341,6 +341,20 @@
                 "round_value": 0
             }
         },
+        "open_close_lighting2": {
+            "name": "Open/Close sensor",
+            "incremental" : false,
+            "data_type": "DT_OpenClose",
+            "conversion" : "from_off_on_to_DT_OpenClose",
+            "timeout" : 0,
+            "history": {
+                "store": true,
+                "duplicate" : false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        },
         "rssi_lighting2": {
             "name": "Signal strength",
             "incremental" : false,
@@ -446,6 +460,37 @@
                 ]
             }
        },
+       "open_close_lighting2": {
+            "name": "Open/Close sensor",
+            "schema": "ac.basic",
+            "parameters": {
+                "static": [],
+                "device": [
+                    {
+                        "key": "address",
+                        "description": "Device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe",
+                        "type": "string"
+                    },
+                    {
+                        "key": "unit",
+                        "description": "Device unit (1..16). Example: 3",
+                        "type": "integer"
+                    }
+                ],
+                "dynamic": [
+                    {
+                        "key": "rssi",
+                        "ignore_values": "",
+                        "sensor": "rssi_lighting2"
+                    },
+                    {
+                        "key": "command",
+                        "ignore_values": "",
+                        "sensor": "open_close_lighting2"
+                    }
+                ]
+            }
+       },
        "temperature": {
             "name": "Temperature",
             "schema": "sensor.basic",
@@ -536,12 +581,12 @@
             "sensors": ["switch_lighting2", "rssi_lighting2"],
             "parameters": []
         },
-        "rfxcom.door_window_lighting2": {
+        "rfxcom.open_close_lighting2": {
             "description": "", 
-            "id": "rfxcom.door_window_lighting2", 
-            "name": "Door/window sensor : Chacon, ...",
+            "id": "rfxcom.open_close_lighting2", 
+            "name": "Door/window close/open sensor : Chacon, ...",
             "commands": [],
-            "sensors": ["switch_lighting2", "rssi_lighting2"],
+            "sensors": ["open_close_lighting2", "rssi_lighting2"],
             "parameters": []
         },
         "rfxcom.temperature": {
@@ -586,7 +631,7 @@
             }
         ],
         "description": "Rfxcom plugin for usb Rfxcom model", 
-        "domogik_min_version": "0.4.0", 
+        "domogik_min_version": "0.4.1", 
         "name": "rfxcom", 
         "type": "plugin", 
         "compliant_xpl_clients" : ["rfxcom-lan"],

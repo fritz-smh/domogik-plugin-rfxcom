@@ -678,21 +678,16 @@ class Rfxcom:
                         "rssi" : rssi})
 
         # handle device features detection
-        for feature in ['switch_lighting2']:
-            #self.cb_device_detected(device_type = "rfxcom.door_window_lignthing_2", 
-            #                        type = "xpl_stats",
-            #                        feature = feature,
-            #                        data = {"address" : address,
-            #                                "unit" : unit_code,
-            #                                "reference" : "{0} (lighting2)".format(subtype_desc)})
+        # only the window/door close/open sensors are detected
+        for feature in ['open_close_lighting2']:
             self.cb_device_detected({
-                "device_type" : "rfxcom.door_window_lignthing_2",
+                "device_type" : "rfxcom.open_close_lignthing_2",
                 "reference" : "{0} (lighting2)".format(subtype_desc),
                 "global" : [],
                 "xpl" : [],
                 "xpl_commands" : {},
                 "xpl_stats" : {
-                    "switch_lighting2" : [
+                    "open_close_lighting2" : [
                         {
                             "key" : "address",
                             "value" : address
@@ -772,7 +767,7 @@ class Rfxcom:
                 "global" : [],
                 "xpl" : [
                     {
-                        "key" : "address",
+                        "key" : "device",
                         "value" : address
                     }
                 ],
@@ -860,7 +855,7 @@ class Rfxcom:
                 "global" : [],
                 "xpl" : [
                     {
-                        "key" : "address",
+                        "key" : "device",
                         "value" : address
                     }
                 ],
