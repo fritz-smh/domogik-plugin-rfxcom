@@ -679,15 +679,15 @@ class Rfxcom:
 
         # handle device features detection
         # only the window/door close/open sensors are detected
-        for feature in ['open_close_lighting2']:
+        for feature in ['open_close']:
             self.cb_device_detected({
-                "device_type" : "rfxcom.open_close_lignthing_2",
-                "reference" : "{0} (lighting2)".format(subtype_desc),
+                "device_type" : "rfxcom.open_close",
+                "reference" : "{0} ".format(subtype_desc),
                 "global" : [],
                 "xpl" : [],
                 "xpl_commands" : {},
                 "xpl_stats" : {
-                    "open_close_lighting2" : [
+                    "open_close" : [
                         {
                             "key" : "address",
                             "value" : address
