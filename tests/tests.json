@@ -4,11 +4,6 @@
         "need_hardware" : false,
         "criticity" : "high"
     },
-    "type_11_sensors_multiple_addresses" : {
-        "alter_configuration_or_setup" : true,
-        "need_hardware" : false,
-        "criticity" : "high"
-    },
     "type_50_temperarature_sensors" : {
         "alter_configuration_or_setup" : true,
         "need_hardware" : false,
