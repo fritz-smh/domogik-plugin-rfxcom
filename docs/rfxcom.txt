@@ -63,16 +63,20 @@ If your device is already listed in the products list, select it. Some fields wi
 How to get a device address ?
 =============================
 
-.. todo::
-
-    to describe : auto discovery
+All the devices detected by the plugin are listed in Domogik administration. To see them, make sure that the plugin is started, wait a few minutes to let the plugin see all sensors, activate manually the open/close sensors, switch on or off the lights, ... Then, you can look for detected devices in the *Domogik devices* part.
 
 How to set a device to an address ?
 ===================================
 
-.. todo::
+Depending of the device (brand, model), there are various way to set up the hardware device address. The device documentation may help you to find how to do.
 
-    to describe : global method by brands
+Here are the steps to set an address to a device, for example a Switch plug :
+
+* create the related device in Domogik and set it some address, for example : *address = 0x0038abfc, unit = 11*.
+* put the hardware device in learning mode (thanks to the device documentation)
+* in Domogik administration, on the device details, click on the "On" button
+* the device light should blink to tell it is ok
+
 
 Start the plugin
 ================

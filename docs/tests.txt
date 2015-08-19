@@ -9,6 +9,10 @@ Here is a summary of the implemented tests and also of the features which have b
 ======================================= =============== ==============================================================
 Feature                                 Automated tests Tests with real devices
 ======================================= =============== ==============================================================
+type 11 - switch plug                   yes             yes (fritz, Chacon, DIO)
+--------------------------------------- --------------- --------------------------------------------------------------
+type 11 - open close sensor             yes             yes (fritz, Chacon open/close sensor)
+--------------------------------------- --------------- --------------------------------------------------------------
 type 50 - temperature                   yes             yes (fritz, Lacrosse)
 --------------------------------------- --------------- --------------------------------------------------------------
 type 52 - temperature and humidity      yes             yes (fritz, Oregon device)

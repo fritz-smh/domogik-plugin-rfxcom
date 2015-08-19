@@ -11,14 +11,15 @@ These devices are open sensors and are able to detect when a door or a window (o
 
     more informations about all models
 
-.. image:: door_window_lighting2_ch54581_1.jpg
+.. image:: open_close_ch54581_1.jpg
 
 Features
 ========
 
-These devices acts as switch commands. If they are open they send an *on* event. If they are closed, they send an *off* event. They have only one feature : 
+These devices acts as switch commands. If they are open they send an *on* event. If they are closed, they send an *off* event. They have the following features :
 
-* switch
+* Open/close sensor
+* RSSI (signal strength) 
 
 Configuration
 =============
