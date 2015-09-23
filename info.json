@@ -341,6 +341,20 @@
                 "round_value": 0
             }
         },
+        "rssi_lighting2": {
+            "name": "Signal strength",
+            "incremental" : false,
+            "data_type": "DT_Number",
+            "conversion": "",
+            "timeout" : 600,
+            "history": {
+                "store": true,
+                "duplicate" : false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        },
         "open_close": {
             "name": "Open/Close sensor",
             "incremental" : false,
@@ -355,7 +369,7 @@
                 "round_value": 0
             }
         },
-        "rssi_lighting2": {
+        "rssi_open_close": {
             "name": "Signal strength",
             "incremental" : false,
             "data_type": "DT_Number",
@@ -481,7 +495,7 @@
                     {
                         "key": "rssi",
                         "ignore_values": "",
-                        "sensor": "rssi_lighting2"
+                        "sensor": "rssi_open_close"
                     },
                     {
                         "key": "command",
@@ -586,7 +600,7 @@
             "id": "rfxcom.open_close", 
             "name": "Door/window close/open sensor : Chacon, ...",
             "commands": [],
-            "sensors": ["open_close", "rssi_lighting2"],
+            "sensors": ["open_close", "rssi_open_close"],
             "parameters": []
         },
         "rfxcom.temperature": {
