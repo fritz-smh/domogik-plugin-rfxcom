@@ -1,0 +1,193 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from domogik.xpl.common.plugin import XplPlugin
+from domogik.tests.common.plugintestcase import PluginTestCase
+from domogik.tests.common.testplugin import TestPlugin
+from domogik.tests.common.testdevice import TestDevice
+from domogik.tests.common.testsensor import TestSensor
+from domogik.tests.common.testcommand import TestCommand
+from domogik.common.utils import get_sanitized_hostname
+from datetime import datetime
+import unittest
+import sys
+import os
+import traceback
+
+class RfxcomTestCase(PluginTestCase):
+
+    def test_0100_type11_sensor(self):
+        """ check if after a command is requested over rest, we receive the xpl-trig message and status is sotred in database
+            Example : 
+            Rfxcom trame : 0b1100010038abfe0a010000
+            Sample xPL message :
+            xpl-trig : schema:ac.basic, data:{'rssi': 68, 'command': 'off', 'unit': 10, 'address': '0x0038abfe'}
+
+        """
+        global devices
+        global unit  
+
+        tests = [ {
+                     'address' : "0x0038abfe",
+                     'unit' : 10,
+                     'command' : 'off',
+                     'rest_command' : 0
+                  },
+                  {
+                     'address' : "0x0038abfe",
+                     'unit' : 10,
+                     'command' : 'on',
+                     'rest_command' : 1
+                  }]
+
+        for test in tests:
+            self.test_feature(test['address'], 
+                              test['unit'], 
+                              devices[test['address']], 
+                              test['command'], 
+                              test['rest_command'])
+
+    def test_feature(self, address, unit, device_id, command, rest_command):
+        """ Do the tests 
+            @param address : device address
+            @param unit : device unit
+            @param device_id : device id
+            @param command
+            @param rest_command
+        """
+
+        # test 
+        print(u"Device address = {0}".format(address))
+        print(u"Device unit = {0}".format(unit))
+        print(u"Device id = {0}".format(device_id))
+
+        print(u"Call REST to send an '{0}'  command".format(rest_command))
+        tc = TestCommand(device_id, "switch_lighting2")
+        # send command
+        tc.send_command(rest_command)
+        print(u"Check that a message with command = 'off' is sent.")
+        
+        self.assertTrue(self.wait_for_xpl(xpltype = "xpl-trig",
+                                          xplschema = "ac.basic",
+                                          xplsource = "domogik-{0}.{1}".format(self.name, get_sanitized_hostname()),
+                                          data = {"command" : command,
+                                                  "address" : address,
+                                                  "unit" : unit},
+                                          timeout = 60))
+        print(u"Check that the value of the xPL message has been inserted in database")
+        sensor = TestSensor(device_id, "switch_lighting2")
+        print(sensor.get_last_value())
+        from domogik_packages.plugin_rfxcom.conversion.from_off_on_to_DT_Switch import from_off_on_to_DT_Switch
+        # the data is converted to be inserted in database
+        self.assertTrue(int(sensor.get_last_value()[1]) == from_off_on_to_DT_Switch(self.xpl_data.data['command']))
+
+
+
+
+if __name__ == "__main__":
+
+    test_folder = os.path.dirname(os.path.realpath(__file__))
+
+    ### global variables
+    # the key will be the device address
+    devices = { "0x0038abfe" : 0
+              }
+    # for this kind of devices (address is set in 2 params : address+unit) we assume that unit will be 11 for all tests
+    unit = 10
+
+    ### configuration
+
+    # set up the xpl features
+    xpl_plugin = XplPlugin(name = 'test', 
+                           daemonize = False, 
+                           parser = None, 
+                           nohub = True,
+                           test  = True)
+
+    # set up the plugin name
+    name = "rfxcom"
+
+    # set up the configuration of the plugin
+    # configuration is done in test_0010_configure_the_plugin with the cfg content
+    # notice that the old configuration is deleted before
+    cfg = { 'configured' : True,
+            'device' : '/dev/rfxcom' }
+    # specific configuration for test mdode (handled by the manager for plugin startup)
+    cfg['test_mode'] = True 
+    cfg['test_option'] = "{0}/type_11_command_data.json".format(test_folder)
+   
+
+    ### start tests
+
+    # load the test devices class
+    td = TestDevice()
+
+    # delete existing devices for this plugin on this host
+    client_id = "{0}-{1}.{2}".format("plugin", name, get_sanitized_hostname())
+    try:
+        td.del_devices_by_client(client_id)
+    except: 
+        print(u"Error while deleting all the test device for the client id '{0}' : {1}".format(client_id, traceback.format_exc()))
+        sys.exit(1)
+
+    # create a test device
+    try:
+        params = td.get_params(client_id, "rfxcom.switch_lighting2")
+   
+        for dev in devices:
+            # fill in the params
+            params["device_type"] = "rfxcom.switch_lighting2"
+            params["name"] = "test_device_rfxcom_type11_{0}".format(dev)
+            params["reference"] = "reference"
+            params["description"] = "description"
+            # global params
+            pass # there are no global params for this plugin
+            # xpl params
+            # usually we configure the xpl parameters. In this device case, we can have multiple addresses
+            # so the parameters are configured on xpl_stats level
+            #for the_param in params['xpl']:
+            for the_param in params['xpl_stats']['switch_lighting2']:
+                if the_param['key'] == "address":
+                    the_param['value'] = dev
+                if the_param['key'] == "unit":
+                    the_param['value'] = unit
+            for the_param in params['xpl_commands']['switch_lighting2']:
+                if the_param['key'] == "address":
+                    the_param['value'] = dev
+                if the_param['key'] == "unit":
+                    the_param['value'] = unit
+            print params['xpl']
+            # create
+            device_id = td.create_device(params)['id']
+            devices[dev] = device_id
+
+    except:
+        print(u"Error while creating the test devices : {0}".format(traceback.format_exc()))
+        sys.exit(1)
+
+    
+    ### prepare and run the test suite
+    suite = unittest.TestSuite()
+    # check domogik is running, configure the plugin
+    suite.addTest(RfxcomTestCase("test_0001_domogik_is_running", xpl_plugin, name, cfg))
+    suite.addTest(RfxcomTestCase("test_0010_configure_the_plugin", xpl_plugin, name, cfg))
+    
+    # start the plugin
+    suite.addTest(RfxcomTestCase("test_0050_start_the_plugin", xpl_plugin, name, cfg))
+
+    # do the specific plugin tests
+    suite.addTest(RfxcomTestCase("test_0100_type11_sensor", xpl_plugin, name, cfg))
+
+    # do some tests comon to all the plugins
+    #suite.addTest(RfxcomTestCase("test_9900_hbeat", xpl_plugin, name, cfg))
+    suite.addTest(RfxcomTestCase("test_9990_stop_the_plugin", xpl_plugin, name, cfg))
+    
+    # quit
+    res = unittest.TextTestRunner().run(suite)
+    if res.wasSuccessful() == True:
+        rc = 0   # tests are ok so the shell return code is 0
+    else:
+        rc = 1   # tests are ok so the shell return code is != 0
+    xpl_plugin.force_leave(return_code = rc)
+
+

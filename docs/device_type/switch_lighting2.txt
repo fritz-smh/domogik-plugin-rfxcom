@@ -1,0 +1,117 @@
+========================================
+Switch devices : AC, HomeEasy EU, ANSLUT
+========================================
+
+Overview
+========
+
+These devices are able to switch on and off some appliances. There are many models in various brands.
+
+These devices can have several addresses set.
+
+.. todo::
+
+    more informations about all models
+
+.. image:: switch_lighting2_chacon_ch54534.jpg
+
+Features
+========
+
+These devices are not dimmer devices. They have only one feature : 
+
+* switch
+
+Configuration
+=============
+
+When you create such a device, you will have to set the parameters for both the command and the sensor part.
+For a common usage, you will set the same values for the *xPL command parameters* and the *xPL stat parameters*.
+
+xPL command parameters
+----------------------
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+address               string                      The device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe
+--------------------- --------------------------- ----------------------------------------------------------------------
+unit                  integer                     The device unit (1..16). Example: 3
+===================== =========================== ======================================================================
+
+xPL stat parameters
+-------------------
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+address               string                      The device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe
+--------------------- --------------------------- ----------------------------------------------------------------------
+unit                  integer                     The device unit (1..16). Example: 3
+===================== =========================== ======================================================================
+
+For both address and unit, you can use multiple values. This can be needed if you are controlling the light with several commands : 
+
+* a switch
+* a remote control
+* an open/close sensor
+
+If you don't set all the possible addreses, the device sensor status may not be updated on Domogik side!
+
+Here is an example for the **0x0011223344 : 10** and **0x0044332211 : 8** :
+
+* address = 0x0011223344|0x0044332211
+* unit = 10|8
+
+
+Configure the hardware device
+=============================
+
+You can set up the *address* and *unit* values for this kind of hardware devices. Here are the instructions for several models. Before doing this, you will have to create a Domogik device with the values you can freely choose for both *address* and *unit* parameters.
+
+DI.O PDR-2300
+-------------
+
+.. todo::
+    picture
+
+Delete the learned addresses
+****************************
+
+Be careful, this will delete **all** the addresses learned by the hardware device!
+
+* Plug the module.
+* Call this command before the led stop blinking (there is currently no way to do this from Domogik administration):  ::
+
+    dmg_send xpl-cmnd ac.basic "address=0x1,unit=1,command=group_off"
+
+* The plugged light should blink twice for acknowlegment.
+
+Learn a new address
+*******************
+
+* Plug the module.
+* Do this action before the led stop blinking : in Domogik administration, on your device details, for the command part, click on the **On** button of the switch command.
+* The plugged light should blink twice for acknowlegment.
+
+Chacon 54561, 54565, 54566, 54567, 54581, 54582, 54585, 54585
+-------------------------------------------------------------
+
+.. todo::
+    picture
+
+Delete the learned addresses
+****************************
+
+* Plug the module. Press the button until the led blinks (about 6 seconds). 
+* Press the button one more time. 
+* The plugged light should blink twice for acknowlegment.
+
+Learn a new address
+*******************
+
+* Plug the module. 
+* Press the button. 
+* Do this action before the led stop blinking : in Domogik administration, on your device details, for the command part, click on the **On** button of the switch command.
+* The plugged light should blink twice for acknowlegment.
+

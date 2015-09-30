@@ -1,0 +1,45 @@
+==================================================
+Doors and windows open/close sensors : Chacon, ...
+==================================================
+
+Overview
+========
+
+These devices are open sensors and are able to detect when a door or a window (or whatever else) is opened and closed.
+
+.. todo::
+
+    more informations about all models
+
+.. image:: open_close_ch54581_1.jpg
+
+Features
+========
+
+These devices acts as switch commands. If they are open they send an *on* event. If they are closed, they send an *off* event. They have the following features :
+
+* Open/close sensor
+* RSSI (signal strength) 
+
+Configuration
+=============
+
+When you create such a device, you will have to set these parameters:
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+address               string                      The device address (0x00000000 to 0x03ffffff). Example: 0x0038abfe
+--------------------- --------------------------- ----------------------------------------------------------------------
+unit                  integer                     The device unit (1..16). Example: 3
+===================== =========================== ======================================================================
+
+Configure the hardware device
+=============================
+
+Chacon 54581
+------------
+
+You can't set up the *address* and *unit* on the hardware.
+
+You can find the value of both *address* and *unit* for your device in the list of the *detected devices* in Domogik administration.

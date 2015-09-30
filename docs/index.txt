@@ -9,6 +9,8 @@ Table Of Content
     /rfxcom
     /device_type/temperature_humidity
     /device_type/temperature
+    /device_type/switch_lighting2
+    /device_type/open_close
     /dev
     /tests
     /changelog
