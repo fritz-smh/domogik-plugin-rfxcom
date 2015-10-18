@@ -2,6 +2,11 @@
 Changelog
 =========
 
+1.68.3
+======
+
+* Add 'nbz-rfxcomrx' as compliant xPL client (this is the xpl-perl library)
+
 1.68.2
 ======
 

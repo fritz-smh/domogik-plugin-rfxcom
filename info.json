@@ -648,8 +648,8 @@
         "domogik_min_version": "0.4.1", 
         "name": "rfxcom", 
         "type": "plugin", 
-        "compliant_xpl_clients" : ["rfxcom-lan"],
-        "version": "1.68.2"
+        "compliant_xpl_clients" : ["rfxcom-lan", "bnz-rfxcomrx"],
+        "version": "1.68.3"
     }, 
     "json_version": 2
 }
