@@ -6,6 +6,7 @@ Changelog
 ======
 
 * Add 'nbz-rfxcomrx' as compliant xPL client (this is the xpl-perl library)
+* Doc upgrade for open close sensors
 
 1.68.2
 ======
