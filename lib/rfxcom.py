@@ -439,14 +439,14 @@ class Rfxcom:
         self.log.debug(u"Packet type = %s" % type)
         try:
             if RESTRICT_TO_TYPE != [] and int(type) != 02 and int(type) not in RESTRICT_TO_TYPE:
-                self.log.warning("Message skipped due to development restrictions (see RESTRICT_TO_TYPE variable content)")
+                self.log.warning(u"Message skipped due to development restrictions (see RESTRICT_TO_TYPE variable content)")
             else:
                 eval("self._process_%s('%s')" % (type, data))
         except AttributeError:
-            warning = "No function for type '%s' with data : '%s'. It may be not yet implemented in the plugin. Full trace : %s" % (type, data, traceback.format_exc())
+            warning = u"No function for type '%s' with data : '%s'. It may be not yet implemented in the plugin. Full trace : %s" % (type, data, traceback.format_exc())
             self.log.warning(warning)
         except:
-            error = "Error while processing type %s : %s" % (type, traceback.format_exc())
+            error = u"Error while processing type %s : %s" % (type, traceback.format_exc())
             self.log.error(u"{0}".format(error))
 
     def decode_status(self, data):
@@ -513,32 +513,32 @@ class Rfxcom:
 
         if subtype == "00":
             ack = False
-            subtype_desc = "error, receiver did not lock"
-            self.error.log("Response from RFXCOM : error, receiver did not lock")
+            subtype_desc = u"error, receiver did not lock"
+            self.error.log(u"Response from RFXCOM : error, receiver did not lock")
         elif subtype == "01":
-            subtype_desc = "transmitter response"
+            subtype_desc = u"transmitter response"
             if msg == "00":
                 ack = True
-                msg_desc = "ACK, transmit OK"
+                msg_desc = u"ACK, transmit OK"
             elif msg == "01":
                 ack = True
-                msg_desc = "ACK, but transmit started after 3 seconds delay anyway with RF receive data"
+                msg_desc = u"ACK, but transmit started after 3 seconds delay anyway with RF receive data"
                 self.log.warning(u"Response from RFXCOM : ACK, but transmit started after 3 seconds delay anyway with RF receive data")
             elif msg == "02":
                 ack = False
-                msg_desc = "NAK, transmitter did not lock on the requested transmit frequency"
+                msg_desc = u"NAK, transmitter did not lock on the requested transmit frequency"
                 self.log.error(u"Response from RFXCOM : NAK, transmitter did not lock on the requested transmit frequency")
             elif msg == "03":
                 ack = False
-                msg_desc = "NAK, AC address zero in id1-id4 not allowed"
+                msg_desc = u"NAK, AC address zero in id1-id4 not allowed"
                 self.log.error(u"Response from RFXCOM : NAK, AC address zero in id1-id4 not allowed")
             else:
                 ack = False
-                msg_desc = "unknown message !!!"
+                msg_desc = u"unknown message !!!"
                 self.log.error(u"Bad message received from RFXCOM : {0}".format(data))
         else:
             ack = False
-            subtype_desc = "unknown subtype !!!"
+            subtype_desc = u"unknown subtype !!!"
             self.log.error(u"Bad message received from RFXCOM : {0}".format(data))
 
         # debug informations
