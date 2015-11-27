@@ -12,7 +12,7 @@ These devices are able to send the temperature and the humidity. There are many 
 Features
 ========
 
-These devices has several features:
+These devices have several features:
 
 * temperature
 * humidity

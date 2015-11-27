@@ -11,6 +11,7 @@ Table Of Content
     /device_type/temperature
     /device_type/switch_lighting2
     /device_type/open_close
+    /device_type/smoke_sensor
     /dev
     /tests
     /changelog
