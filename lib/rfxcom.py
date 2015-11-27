@@ -439,14 +439,14 @@ class Rfxcom:
         self.log.debug(u"Packet type = %s" % type)
         try:
             if RESTRICT_TO_TYPE != [] and int(type) != 02 and int(type) not in RESTRICT_TO_TYPE:
-                self.log.warning("Message skipped due to development restrictions (see RESTRICT_TO_TYPE variable content)")
+                self.log.warning(u"Message skipped due to development restrictions (see RESTRICT_TO_TYPE variable content)")
             else:
                 eval("self._process_%s('%s')" % (type, data))
         except AttributeError:
-            warning = "No function for type '%s' with data : '%s'. It may be not yet implemented in the plugin. Full trace : %s" % (type, data, traceback.format_exc())
+            warning = u"No function for type '%s' with data : '%s'. It may be not yet implemented in the plugin. Full trace : %s" % (type, data, traceback.format_exc())
             self.log.warning(warning)
         except:
-            error = "Error while processing type %s : %s" % (type, traceback.format_exc())
+            error = u"Error while processing type %s : %s" % (type, traceback.format_exc())
             self.log.error(u"{0}".format(error))
 
     def decode_status(self, data):
@@ -513,32 +513,32 @@ class Rfxcom:
 
         if subtype == "00":
             ack = False
-            subtype_desc = "error, receiver did not lock"
-            self.error.log("Response from RFXCOM : error, receiver did not lock")
+            subtype_desc = u"error, receiver did not lock"
+            self.error.log(u"Response from RFXCOM : error, receiver did not lock")
         elif subtype == "01":
-            subtype_desc = "transmitter response"
+            subtype_desc = u"transmitter response"
             if msg == "00":
                 ack = True
-                msg_desc = "ACK, transmit OK"
+                msg_desc = u"ACK, transmit OK"
             elif msg == "01":
                 ack = True
-                msg_desc = "ACK, but transmit started after 3 seconds delay anyway with RF receive data"
+                msg_desc = u"ACK, but transmit started after 3 seconds delay anyway with RF receive data"
                 self.log.warning(u"Response from RFXCOM : ACK, but transmit started after 3 seconds delay anyway with RF receive data")
             elif msg == "02":
                 ack = False
-                msg_desc = "NAK, transmitter did not lock on the requested transmit frequency"
+                msg_desc = u"NAK, transmitter did not lock on the requested transmit frequency"
                 self.log.error(u"Response from RFXCOM : NAK, transmitter did not lock on the requested transmit frequency")
             elif msg == "03":
                 ack = False
-                msg_desc = "NAK, AC address zero in id1-id4 not allowed"
+                msg_desc = u"NAK, AC address zero in id1-id4 not allowed"
                 self.log.error(u"Response from RFXCOM : NAK, AC address zero in id1-id4 not allowed")
             else:
                 ack = False
-                msg_desc = "unknown message !!!"
+                msg_desc = u"unknown message !!!"
                 self.log.error(u"Bad message received from RFXCOM : {0}".format(data))
         else:
             ack = False
-            subtype_desc = "unknown subtype !!!"
+            subtype_desc = u"unknown subtype !!!"
             self.log.error(u"Bad message received from RFXCOM : {0}".format(data))
 
         # debug informations
@@ -635,7 +635,10 @@ class Rfxcom:
         }
 
         subtype = gh(data, 1)
-        subtype_desc = AC_TYPE[subtype]
+        if subtype in AC_TYPE:
+            subtype_desc = AC_TYPE[subtype]
+        else:
+            subtype_desc = "unknown"
         seqnbr = gh(data, 2)
 
         # device address
@@ -679,27 +682,156 @@ class Rfxcom:
 
         # handle device features detection
         # only the window/door close/open sensors are detected
-        for feature in ['open_close']:
-            self.cb_device_detected({
-                "device_type" : "rfxcom.open_close",
-                "reference" : "{0} ".format(subtype_desc),
-                "global" : [],
-                "xpl" : [],
-                "xpl_commands" : {},
-                "xpl_stats" : {
-                    "open_close" : [
-                        {
-                            "key" : "address",
-                            "value" : address
-                        },
-                        {
-                            "key" : "unit",
-                            "value" : unit_code
-                        }
-                    ]
-                }
-            })
+        self.cb_device_detected({
+            "device_type" : "rfxcom.open_close",
+            "reference" : "{0} ".format(subtype_desc),
+            "global" : [],
+            "xpl" : [],
+            "xpl_commands" : {},
+            "xpl_stats" : {
+                "open_close" : [
+                    {
+                        "key" : "address",
+                        "value" : address
+                    },
+                    {
+                        "key" : "unit",
+                        "value" : unit_code
+                    }
+                ]
+            }
+        })
  
+
+
+    def _process_20(self, data):
+        """ Security sensors
+            Last update : 1.68
+        """
+        SUB_TYPE = {
+          "00" : {"model" : "X10 security door/window sensor", "type" : "x10"},
+          "01" : {"model" : "X10 security motion sensor", "type" : "x10"},
+          "02" : {"model" : "X10 security remote (no alive packets)", "type" : "x10"},
+          "03" : {"model" : "KD101 (no alive packets)", "type" : "cn"},
+          "04" : {"model" : "Visionic PowerCode door/windows sensor - primary contact (with alive packets)", "type" : "mct"},
+          "05" : {"model" : "Visionic PowerCode motion sensor (with alive packets)", "type" : "mct"},
+          "06" : {"model" : "Visionic CodeSecure (no alive packets)", "type" : "mct"},
+          "07" : {"model" : "Visionic PowerCode door/windows sensor - auxiliary contact (no alive packets)", "type" : "mct"},
+          "08" : {"model" : "Meiantech", "type" : "xxx"}
+        }
+
+        STATUS = {
+          "00" : {"command" : "normal", "tamper" : False, "delay" : None},
+          "01" : {"command" : "normal", "tamper" : False, "delay" : "max"},
+          "02" : {"command" : "alert", "tamper" : False, "delay" : None},
+          "03" : {"command" : "alert", "tamper" : False, "delay" : "max"},
+          "04" : {"command" : "motion", "tamper" : False, "delay" : None},
+          "05" : {"command" : "normal", "tamper" : False, "delay" : None},    # no motion
+          "06" : {"command" : "panic", "tamper" : False, "delay" : None},
+          "07" : {"command" : "normal", "tamper" : False, "delay" : None},    # end panic
+          "08" : {"command" : None, "tamper" : False, "delay" : None},    # IR
+          "09" : {"command" : "arm-away", "tamper" : False, "delay" : None},
+          "0A" : {"command" : "arm-away", "tamper" : False, "delay" : "max"},
+          "0B" : {"command" : "arm-home", "tamper" : False, "delay" : None},
+          "0C" : {"command" : "arm-home", "tamper" : False, "delay" : "max"},
+          "0D" : {"command" : "disarm", "tamper" : False, "delay" : None},
+          "10" : {"command" : None, "tamper" : False, "delay" : None},    # light 1 off
+          "11" : {"command" : None, "tamper" : False, "delay" : None},    # light 1 on
+          "12" : {"command" : None, "tamper" : False, "delay" : None},    # light 2 off
+          "13" : {"command" : None, "tamper" : False, "delay" : None},    # light 2 on
+          "14" : {"command" : None, "tamper" : False, "delay" : None},    # dark detected
+          "15" : {"command" : None, "tamper" : False, "delay" : None},    # light detected
+          "16" : {"command" : None, "tamper" : False, "delay" : None},    # batlow SD18, CO18
+          "17" : {"command" : "pair", "tamper" : False, "delay" : None},    # pair KD101   
+          "80" : {"command" : "normal", "tamper" : True, "delay" : None},
+          "81" : {"command" : "normal", "tamper" : True, "delay" : "max"},
+          "82" : {"command" : "alert", "tamper" : True, "delay" : None},
+          "83" : {"command" : "alert", "tamper" : True, "delay" : "max"},
+          "84" : {"command" : "motion", "tamper" : True, "delay" : None},
+          "85" : {"command" : "normal", "tamper" : False, "delay" : None}    # no motion + tamper
+        }
+
+        subtype = gh(data, 1)
+        if subtype in SUB_TYPE:
+            subtype_desc = SUB_TYPE[subtype]["model"]
+            type = SUB_TYPE[subtype]["type"]
+        else:
+            subtype_desc = "unknown : {0}".format(subtype)
+            type = "unknown"
+        seqnbr = gh(data, 2)
+        id = gh(data, 3,3)
+        address = "0x{0}".format(id)
+
+        status = gh(data, 6)
+        if status in STATUS:
+            command = STATUS[status]['command']
+            tamper = STATUS[status]['tamper']
+            delay = STATUS[status]['delay']
+        else:
+            command = None
+            tamper = False
+            delay = None
+
+
+        rssi = int(gh(data, 7)[0], 16) * 100/16 # percent
+        battery = (1+int(gh(data, 6)[1], 16)) * 10  # percent
+        # override batery for KD101 (not supported)
+        if subtype == "03":
+            battery = "9"
+
+        # debug informations
+        self.log.debug(u"Packet informations :")
+        self.log.debug(u"- type 20 : security sensor")
+        self.log.debug(u"- address = {0}".format(address))
+        self.log.debug(u"- model = {0}".format(subtype_desc))
+        self.log.debug(u"- type = {0}".format(type))
+        self.log.debug(u"- status = {0}".format(status))
+        self.log.debug(u"- command = {0}".format(command))
+        self.log.debug(u"- tamper = {0}".format(tamper))
+        self.log.debug(u"- delay = {0}".format(delay))
+        self.log.debug(u"- battery = {0}".format(battery))
+        self.log.debug(u"- rssi = {0}".format(rssi))
+ 
+        if subtype == "03":
+            # for now we detect only the smoke sensors...
+            # if you add other kind of devices management, please upgrade the info.json file also
+            # send a first xPL message to say "panic" !!!!
+            data = {"device" : address,
+                    "command" : command,
+                    "type" : type}
+            if tamper:
+                data['tamper'] = "true"
+            if delay:
+                data['delay'] = delay
+            if battery <= 10:
+                data['low-battery'] = "true"
+            self.cb_send_xpl(schema = "x10.security",
+                             data = data)
+
+            # then send a second message to come back to normal stage ?
+            time.sleep(2)
+            data['command'] = "normal"
+            self.cb_send_xpl(schema = "x10.security",
+                             data = data)
+ 
+
+            # handle device features detection
+            self.cb_device_detected({
+                "device_type" : "rfxcom.smoke_sensor",
+                "reference" : subtype_desc, 
+                "global" : [],
+                "xpl" : [
+                    {
+                        "key" : "device",
+                        "value" : address
+                    }
+                ],
+                "xpl_commands" : {},
+                "xpl_stats" : {}
+            })
+        else:
+            self.log.warning("This x10.security device is not yet handled by the plugin! If you need it, please open a ticket ;)")
+
 
 
     def _process_50(self, data):
@@ -755,25 +887,19 @@ class Rfxcom:
                                  "current" : rssi})
 
         # handle device features detection
-        for feature in ['temperature']:
-            #self.cb_device_detected(device_type = "rfxcom.temperature", 
-            #                        type = "xpl_stats",
-            #                        feature = feature,
-            #                        data = {"device" : address,
-            #                                "reference" : model})
-            self.cb_device_detected({
-                "device_type" : "rfxcom.temperature",
-                "reference" : model,
-                "global" : [],
-                "xpl" : [
-                    {
-                        "key" : "device",
-                        "value" : address
-                    }
-                ],
-                "xpl_commands" : {},
-                "xpl_stats" : {}
-            })
+        self.cb_device_detected({
+            "device_type" : "rfxcom.temperature",
+            "reference" : model,
+            "global" : [],
+            "xpl" : [
+                {
+                    "key" : "device",
+                    "value" : address
+                }
+            ],
+            "xpl_commands" : {},
+            "xpl_stats" : {}
+        })
 
         # TODO : and why not rssi, battery ?
 
@@ -843,26 +969,19 @@ class Rfxcom:
                                  "current" : rssi})
 
         # handle device features detection
-        for feature in ['temperature', 'humidity']:
-            #self.cb_device_detected(device_type = "rfxcom.temperature_humidity", 
-            #                        type = "xpl_stats",
-            #                        feature = feature,
-            #                        data = {"device" : address,
-            #                                "reference" : model})
-            self.cb_device_detected({
-                "device_type" : "rfxcom.temperature_humidity",
-                "reference" : model,
-                "global" : [],
-                "xpl" : [
-                    {
-                        "key" : "device",
-                        "value" : address
-                    }
-                ],
-                "xpl_commands" : {},
-                "xpl_stats" : {}
-            })
-        # TODO : and why not rssi, battery ?
+        self.cb_device_detected({
+            "device_type" : "rfxcom.temperature_humidity",
+            "reference" : model,
+            "global" : [],
+            "xpl" : [
+                {
+                    "key" : "device",
+                    "value" : address
+                }
+            ],
+            "xpl_commands" : {},
+            "xpl_stats" : {}
+        })
 
 
 

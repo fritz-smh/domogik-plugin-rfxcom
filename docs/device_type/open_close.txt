@@ -21,6 +21,8 @@ These devices acts as switch commands. If they are open they send an *on* event.
 * Open/close sensor
 * RSSI (signal strength) 
 
+Sadly there is no way to get the battery level information.
+
 Configuration
 =============
 

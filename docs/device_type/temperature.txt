@@ -12,7 +12,7 @@ These devices are able to send the temperature. There are many models of them. Y
 Features
 ========
 
-These devices has several features:
+These devices have several features:
 
 * temperature
 * battery level

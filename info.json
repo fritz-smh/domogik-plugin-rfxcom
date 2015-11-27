@@ -383,6 +383,20 @@
                 "round_value": 0
             }
         },
+        "smoke": {
+            "name": "Smoke sensor",
+            "incremental" : false,
+            "data_type": "DT_Switch",
+            "conversion" : "from_normal_panic_to_DT_Switch",
+            "timeout" : 0,
+            "history": {
+                "store": true,
+                "duplicate" : true,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+            }
+        },
         "temperature": {
             "name": "Temperature",
             "incremental" : false,
@@ -505,85 +519,105 @@
                 ]
             }
        },
+       "smoke": {
+            "name": "Smoke sensor",
+            "schema": "x10.security",
+            "parameters": {
+                "static": [
+                    {
+                        "key": "type",
+                        "value": "cn"
+                    }
+                ],
+                "device": [],
+                "dynamic": [
+                    {
+                         "key": "command",
+                         "ignore_values": "",
+                         "sensor": "smoke"
+                    }
+                ]
+           }
+       },
        "temperature": {
             "name": "Temperature",
             "schema": "sensor.basic",
             "parameters": {
-                    "static": [
-            {
-                "key": "type",
-                "value": "temp"
-            }
-            ],
-                    "device": [],
-                    "dynamic": [
-                        {
-                             "key": "current",
-                             "ignore_values": "",
-                             "sensor": "temperature"
-                        }
-                    ]
-               }
+                "static": [
+                    {
+                        "key": "type",
+                        "value": "temp"
+                    }
+                ],
+                "device": [],
+                "dynamic": [
+                    {
+                         "key": "current",
+                         "ignore_values": "",
+                         "sensor": "temperature"
+                    }
+                ]
+           }
        },
        "humidity": {
             "name": "Humidity",
             "schema": "sensor.basic",
             "parameters": {
-                    "static": [
-            {
-                "key": "type",
-                "value": "humidity"
-            }
-            ],
-                    "device": [],
-                    "dynamic": [
-                        {
-                             "key": "current",
-                             "ignore_values": "",
-                             "sensor": "humidity"
-                        }
-                    ]
-               }
+                "static": [
+                    {
+                        "key": "type",
+                        "value": "humidity"
+                    }
+                ],
+                "device": [],
+                "dynamic": [
+                    {
+                         "key": "current",
+                         "ignore_values": "",
+                         "sensor": "humidity"
+                    }
+                ]
+           }
        },
        "battery": {
             "name": "Battery",
             "schema": "sensor.basic",
             "parameters": {
-                    "static": [
-            {
-                "key": "type",
-                "value": "battery"
-            }
-            ],
-                    "device": [],
-                    "dynamic": [
-                        {
-                             "key": "current",
-                             "ignore_values": "",
-                             "sensor": "battery"
-                        }
-                    ]
-               }
+                "static": [
+                    {
+                        "key": "type",
+                        "value": "battery"
+                    }
+                ],
+                "device": [],
+                "dynamic": [
+                    {
+                         "key": "current",
+                         "ignore_values": "",
+                         "sensor": "battery"
+                    }
+                ]
+           }
        },
        "rssi": {
             "name": "Signal strengh",
             "schema": "sensor.basic",
             "parameters": {
-                    "static": [
-            {
-                "key": "type",
-                "value": "rssi"
-            }
-            ],
-                    "device": [],
-                    "dynamic": [
-                        {
-                             "key": "current",
-                             "ignore_values": "",
-                             "sensor": "rssi"
-                        }
-                    ]
-               }
+                "static": [
+                    {
+                        "key": "type",
+                        "value": "rssi"
+                    }
+                ],
+                "device": [],
+                "dynamic": [
+                    {
+                         "key": "current",
+                         "ignore_values": "",
+                         "sensor": "rssi"
+                    }
+                ]
+           }
        }
     },
     "device_types": {
@@ -602,6 +636,21 @@
             "commands": [],
             "sensors": ["open_close", "rssi_open_close"],
             "parameters": []
+        },
+        "rfxcom.smoke_sensor": {
+            "description": "", 
+            "id": "rfxcom.temperature", 
+            "name": "Smoke sensors (KD-101)",
+            "commands": [],
+            "sensors": ["smoke"],
+            "parameters": [
+                {
+                    "key": "device",
+                    "xpl" : true,
+                    "description": "Device address. Example: 0x1A2B3C",
+                    "type": "string"
+                }
+            ]
         },
         "rfxcom.temperature": {
             "description": "", 
@@ -648,8 +697,8 @@
         "domogik_min_version": "0.4.1", 
         "name": "rfxcom", 
         "type": "plugin", 
-        "compliant_xpl_clients" : ["rfxcom-lan"],
-        "version": "1.68.2"
+        "compliant_xpl_clients" : ["rfxcom-lan", "bnz-rfxcomrx"],
+        "version": "1.68.3"
     }, 
     "json_version": 2
 }

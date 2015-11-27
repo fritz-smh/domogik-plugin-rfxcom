@@ -1,0 +1,31 @@
+====================
+Smoke sensor devices
+====================
+
+Overview
+========
+
+These devices will raise an alarm when some smoke is detected or when the *test button* is pressed.
+
+.. image:: smoke_sensor_kd101.jpg
+
+Features
+========
+
+These devices have one feature:
+
+* raising an alarm
+
+
+Configuration
+=============
+
+When you create such a device, you will have to set this parameter:
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+device                string                      The device address. Example: temp1 0xFFFFFF
+===================== =========================== ======================================================================
+
+You can find the value of *device* for your device in the list of the *detected devices* in Domogik administration after having pushed the **Test** button on the smoke sensor.

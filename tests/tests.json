@@ -9,6 +9,11 @@
         "need_hardware" : false,
         "criticity" : "high"
     },
+    "type_20_smoke_sensor_kd101" : {
+        "alter_configuration_or_setup" : true,
+        "need_hardware" : false,
+        "criticity" : "high"
+    },
     "type_50_temperarature_sensors" : {
         "alter_configuration_or_setup" : true,
         "need_hardware" : false,
