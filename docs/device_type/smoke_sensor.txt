@@ -7,7 +7,7 @@ Overview
 
 These devices will raise an alarm when some smoke is detected or when the *test button* is pressed.
 
-.. image:: smoke_sensor__kd101.jpg
+.. image:: smoke_sensor_kd101.jpg
 
 Features
 ========
