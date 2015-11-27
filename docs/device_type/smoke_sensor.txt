@@ -28,4 +28,4 @@ Key                   Type                        Description
 device                string                      The device address. Example: temp1 0xFFFFFF
 ===================== =========================== ======================================================================
 
-You can find the value of *address* for your device in the list of the *detected devices* in Domogik administration.
+You can find the value of *device* for your device in the list of the *detected devices* in Domogik administration after having pushed the **Test** button on the smoke sensor.
