@@ -2,6 +2,11 @@
 Changelog
 =========
 
+1.68.4
+======
+
+* New datatype : DT_Battery. It is used for all Battery sensors now (previously : DT_Scaling).
+
 1.68.3
 ======
 

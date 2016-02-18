@@ -428,7 +428,7 @@
         "battery": {
             "name": "Battery",
             "incremental" : false,
-            "data_type": "DT_Scaling",
+            "data_type": "DT_Battery",
             "conversion": "",
             "timeout" : 600,
             "history": {
@@ -698,7 +698,7 @@
         "name": "rfxcom", 
         "type": "plugin", 
         "compliant_xpl_clients" : ["rfxcom-lan", "bnz-rfxcomrx"],
-        "version": "1.68.3"
+        "version": "1.68.4"
     }, 
     "json_version": 2
 }
