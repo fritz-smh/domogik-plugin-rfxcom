@@ -202,7 +202,7 @@ class Rfxcom:
             # Here is a example of a status response :
             # length : 13
             # data (including length) : 0d010001025315004f6f00000000
-            status_msg = self.wait_for(self.stop, 13, "01")
+            status_msg = self.wait_for(self.stop, [13, 14], "01")
             self.log.info(u"Status message received : {0}".format(status_msg))
             # decode and display informations about the status
             self.decode_status(status_msg)
@@ -326,19 +326,19 @@ class Rfxcom:
         return "%02x" % ret
             
 
-    def wait_for(self, stop, length, msg_type, timeout = None):
+    def wait_for(self, stop, length_list, msg_type, timeout = None):
         """ Wait for some dedicated message from the Rfxcom. All other received messages will be ignored
         @param stop : an Event to wait for stop request
-        @param length : length of the waited message
+        @param length_list : a list of possible length of the waited message
         @param msg_type : type of the waited message
         @param timeout : timeout : if reached, we raise an error
         """
-        self.log.info(u"Start listening to the rfxcom device for lenght={0}, type={1}".format(length, msg_type))
+        self.log.info(u"Start listening to the rfxcom device for lenght={0}, type={1}".format(length_list, msg_type))
         try:
             # TODO : handle timeout
             while not stop.isSet():
 
-                self.log.debug(u"Waiting for a packet from the rfxcom with a length of {0} and hoping type will be {1}...".format(length, msg_type))
+                self.log.debug(u"Waiting for a packet from the rfxcom with a length of {0} and hoping type will be {1}...".format(length_list, msg_type))
                 data_len = self.rfxcom.read()
                 # handle empty data (why the hell does this happen ?)
                 if data_len == '':
@@ -349,7 +349,7 @@ class Rfxcom:
                 int_data_len = int(hex_data_len, 16)
                     
                 self.log.debug(u"Packet of length {0} (0x{1}) received, start processing...".format(int_data_len, hex_data_len))
-                if int_data_len == length:
+                if int_data_len in length_list:
                     # We read data
                     data = self.rfxcom.read(int_data_len)
                     hex_data = binascii.hexlify(data)
