@@ -202,7 +202,7 @@ class Rfxcom:
             # Here is a example of a status response :
             # length : 13
             # data (including length) : 0d010001025315004f6f00000000
-            status_msg = self.wait_for(self.stop, [13, 14], "01")
+            status_msg = self.wait_for(self.stop, [13, 20], "01")
             self.log.info(u"Status message received : {0}".format(status_msg))
             # decode and display informations about the status
             self.decode_status(status_msg)
